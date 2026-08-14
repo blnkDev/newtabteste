@@ -127,7 +127,19 @@
         transform 560ms cubic-bezier(.22, 1, .36, 1);
     }
 
+    .pokemon-sprite-wrap {
+      position: relative;
+      width: 112px;
+      height: 112px;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
     .pokemon-panel img {
+      position: relative;
+      z-index: 2;
+
       width: 112px;
       height: 112px;
       object-fit: contain;
@@ -139,7 +151,8 @@
 
       transition:
         opacity 150ms ease,
-        transform 150ms ease;
+        transform 150ms ease,
+        filter 220ms ease;
     }
 
     .pokemon-panel img:hover {
@@ -149,6 +162,106 @@
     .pokemon-panel img.loading {
       opacity: 0.25;
       transform: scale(0.94);
+    }
+
+    .pokemon-panel img.switching {
+      opacity: 0;
+      transform: translateY(7px) scale(0.90);
+    }
+
+    /* Efeito especial quando o sorteio vem shiny */
+    .pokemon-sprite-wrap.shiny::before {
+      content: "";
+      position: absolute;
+      inset: 13px;
+      z-index: 0;
+      border-radius: 50%;
+      opacity: 0;
+      background:
+        radial-gradient(
+          circle,
+          rgba(255, 246, 181, 0.34) 0%,
+          rgba(255, 220, 112, 0.14) 40%,
+          transparent 72%
+        );
+      pointer-events: none;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny::before {
+      animation: shiny-glow 1200ms cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny img {
+      animation: shiny-pop 760ms cubic-bezier(.22, 1, .36, 1) both;
+      filter:
+        drop-shadow(0 3px 12px rgba(0, 0, 0, 0.28))
+        drop-shadow(0 0 11px rgba(255, 232, 138, 0.34));
+    }
+
+    .shiny-sparkles {
+      position: absolute;
+      inset: -5px;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .shiny-sparkles span {
+      position: absolute;
+      display: block;
+      opacity: 0;
+      color: rgba(255, 245, 190, 0.95);
+      font-size: 17px;
+      line-height: 1;
+      text-shadow: 0 0 8px rgba(255, 224, 123, 0.55);
+    }
+
+    .shiny-sparkles span:nth-child(1) { top: 4px; left: 20px; }
+    .shiny-sparkles span:nth-child(2) { top: 17px; right: 6px; font-size: 12px; }
+    .shiny-sparkles span:nth-child(3) { top: 55px; left: -2px; font-size: 11px; }
+    .shiny-sparkles span:nth-child(4) { bottom: 6px; right: 18px; font-size: 15px; }
+    .shiny-sparkles span:nth-child(5) { bottom: 12px; left: 18px; font-size: 9px; }
+    .shiny-sparkles span:nth-child(6) { top: 45px; right: -5px; font-size: 9px; }
+
+    .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span:nth-child(1) {
+      animation: sparkle 900ms 70ms ease-out both;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span:nth-child(2) {
+      animation: sparkle 760ms 180ms ease-out both;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span:nth-child(3) {
+      animation: sparkle 820ms 260ms ease-out both;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span:nth-child(4) {
+      animation: sparkle 900ms 130ms ease-out both;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span:nth-child(5) {
+      animation: sparkle 760ms 330ms ease-out both;
+    }
+
+    .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span:nth-child(6) {
+      animation: sparkle 820ms 390ms ease-out both;
+    }
+
+    @keyframes shiny-glow {
+      0%   { opacity: 0; transform: scale(0.58); }
+      30%  { opacity: 1; transform: scale(1.22); }
+      100% { opacity: 0.30; transform: scale(1); }
+    }
+
+    @keyframes shiny-pop {
+      0%   { transform: scale(0.84); }
+      42%  { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes sparkle {
+      0%   { opacity: 0; transform: scale(0.20) rotate(0deg); }
+      35%  { opacity: 1; transform: scale(1.25) rotate(35deg); }
+      100% { opacity: 0; transform: scale(0.45) rotate(90deg); }
     }
 
 
@@ -257,6 +370,7 @@
         width: 160px;
       }
 
+      .pokemon-sprite-wrap,
       .pokemon-panel img {
         width: 88px;
         height: 88px;
@@ -279,6 +393,12 @@
       .search-box {
         transition: none;
       }
+
+      .hero:hover .pokemon-sprite-wrap.shiny::before,
+      .hero:hover .pokemon-sprite-wrap.shiny img,
+      .hero:hover .pokemon-sprite-wrap.shiny .shiny-sparkles span {
+        animation: none;
+      }
     }
   </style>
 </head>
@@ -294,7 +414,17 @@
       </div>
 
       <div class="pokemon-panel" id="pokemon-panel" aria-hidden="true">
-        <img id="pokemon-sprite" alt="" />
+        <div class="pokemon-sprite-wrap" id="pokemon-sprite-wrap">
+          <div class="shiny-sparkles" aria-hidden="true">
+            <span>✦</span>
+            <span>✦</span>
+            <span>✦</span>
+            <span>✦</span>
+            <span>✦</span>
+            <span>✦</span>
+          </div>
+          <img id="pokemon-sprite" alt="" />
+        </div>
         <div id="message"></div>
       </div>
     </section>
@@ -316,6 +446,8 @@
   <script>
     const clock = document.getElementById("clock");
     const pokemonSprite = document.getElementById("pokemon-sprite");
+    const pokemonSpriteWrap = document.getElementById("pokemon-sprite-wrap");
+    const pokemonPanel = document.getElementById("pokemon-panel");
     const message = document.getElementById("message");
     const themeColor = document.getElementById("theme-color");
 
@@ -325,15 +457,17 @@
     /*
       FAVORITOS:
       Coloque aqui os números da Pokédex dos seus favoritos.
-
-      Exemplo:
-      const FAVORITE_POKEMON_IDS = [94, 143, 254];
-
-      Quando essa lista tiver algum Pokémon, existe 5% de chance
-      de uma nova aba sortear um deles.
+      Quando a lista tiver algum Pokémon, existe 5% de chance
+      de um sorteio usar um deles.
     */
     const FAVORITE_POKEMON_IDS = [];
     const FAVORITE_CHANCE = 0.05;
+
+    /*
+      Chance de shiny por sorteio.
+      0.02 = 2%.
+    */
+    const SHINY_CHANCE = 0.02;
 
     const KEYBOARD_SHORTCUTS = {
       y: "https://youtube.com",
@@ -341,11 +475,125 @@
       s: "https://open.spotify.com"
     };
 
-    function getMessage(hour) {
-      if (hour >= 5 && hour < 12) return "Bom dia.";
-      if (hour >= 12 && hour < 18) return "Boa tarde.";
-      if (hour >= 18 && hour < 23) return "Boa noite.";
-      return "Toca a acordar.";
+    const PHRASES = {
+      madrugada: [
+        "A madrugada rende.",
+        "Só mais uma aba.",
+        "Silêncio lá fora.",
+        "Você ainda tá acordado?",
+        "Hora estranha pra estar produtivo.",
+        "O sono perdeu essa batalha.",
+        "A noite ainda não acabou."
+      ],
+      manha: [
+        "Bom dia.",
+        "Começa sem pressa.",
+        "Dia novo.",
+        "Bora fazer alguma coisa boa.",
+        "Primeiro passo do dia.",
+        "A manhã tá só começando.",
+        "Abriu a aba, começou."
+      ],
+      tarde: [
+        "Boa tarde.",
+        "Ainda dá tempo.",
+        "Segue o baile.",
+        "Uma coisa de cada vez.",
+        "Continua.",
+        "Metade do caminho.",
+        "A tarde ainda rende."
+      ],
+      noite: [
+        "Boa noite.",
+        "Dia quase fechado.",
+        "Desacelera um pouco.",
+        "Últimas quests do dia.",
+        "A noite começou.",
+        "Mais uma antes de parar.",
+        "Hora de fechar algumas abas."
+      ],
+      fimDoDia: [
+        "Já tá ficando tarde.",
+        "Última do dia?",
+        "Quase amanhã.",
+        "Talvez seja hora de parar.",
+        "Só não perde a noção do horário.",
+        "Amanhã continua."
+      ]
+    };
+
+    /*
+      Easter eggs exatos de horário.
+      Eles substituem temporariamente a frase normal.
+    */
+    const TIME_EASTER_EGGS = {
+      "00:00": "Um novo dia começou.",
+      "03:33": "Um Gastly passou por aqui.",
+      "04:04": "Pokémon not found.",
+      "06:00": "A rota abriu.",
+      "12:34": "12:34. Satisfatório.",
+      "13:37": "Leet o'clock.",
+      "20:20": "Visão perfeita.",
+      "22:22": "Faz um desejo.",
+      "23:59": "Último minuto do dia."
+    };
+
+    let currentPhrase = "";
+    let currentPhrasePeriod = "";
+    let currentEasterEgg = null;
+
+    let nextPokemonPromise = null;
+    let pokemonChanging = false;
+    let pendingShinySound = false;
+    let audioContext = null;
+
+    function getPeriod(hour) {
+      if (hour < 5) return "madrugada";
+      if (hour < 12) return "manha";
+      if (hour < 18) return "tarde";
+      if (hour < 23) return "noite";
+      return "fimDoDia";
+    }
+
+    function pickDifferent(items, previous) {
+      if (items.length <= 1) return items[0];
+
+      const alternatives = items.filter(item => item !== previous);
+      return alternatives[Math.floor(Math.random() * alternatives.length)];
+    }
+
+    function updatePhrase(forceRandom = false) {
+      const now = new Date();
+
+      const timeKey = now.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      });
+
+      const easterEgg = TIME_EASTER_EGGS[timeKey];
+
+      if (easterEgg) {
+        currentEasterEgg = timeKey;
+        currentPhrase = easterEgg;
+        message.textContent = easterEgg;
+        return;
+      }
+
+      const period = getPeriod(now.getHours());
+
+      if (
+        forceRandom ||
+        currentEasterEgg !== null ||
+        currentPhrasePeriod !== period ||
+        !currentPhrase
+      ) {
+        currentPhrase = pickDifferent(PHRASES[period], currentPhrase);
+        currentPhrasePeriod = period;
+        currentEasterEgg = null;
+      }
+
+      message.textContent = currentPhrase;
     }
 
     function updateClock() {
@@ -357,7 +605,7 @@
         hour12: false
       });
 
-      message.textContent = getMessage(now.getHours());
+      updatePhrase(false);
     }
 
     function getRandomPokemonId() {
@@ -381,11 +629,23 @@
         .join(" ");
     }
 
-    async function setRandomPokemon() {
-      pokemonSprite.classList.add("loading");
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(url);
+        image.onerror = reject;
+        image.src = url;
+      });
+    }
 
-      for (let attempt = 0; attempt < 12; attempt++) {
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function preparePokemon() {
+      for (let attempt = 0; attempt < 14; attempt++) {
         const pokemonId = getRandomPokemonId();
+        const isShiny = Math.random() < SHINY_CHANCE;
 
         try {
           const response = await fetch(
@@ -396,43 +656,211 @@
 
           const pokemon = await response.json();
 
-          const showdownGif =
-            pokemon.sprites?.other?.showdown?.front_default;
-
-          const blackWhiteGif =
+          const showdown = pokemon.sprites?.other?.showdown;
+          const blackWhiteAnimated =
             pokemon.sprites?.versions?.["generation-v"]?.["black-white"]
-              ?.animated?.front_default;
+              ?.animated;
 
-          const sprite = showdownGif || blackWhiteGif;
+          const normalSprite =
+            showdown?.front_default ||
+            blackWhiteAnimated?.front_default;
 
+          const shinySprite =
+            showdown?.front_shiny ||
+            blackWhiteAnimated?.front_shiny;
+
+          const sprite = isShiny ? shinySprite : normalSprite;
+
+          /*
+            Se o shiny sorteado não tiver GIF animado disponível,
+            tentamos outro Pokémon para manter a regra do idle animado.
+          */
           if (!sprite) continue;
 
-          const pokemonName = formatPokemonName(pokemon.name);
+          await preloadImage(sprite);
 
-          // Pré-carrega o GIF antes de trocar o atual.
-          const preload = new Image();
-
-          await new Promise((resolve, reject) => {
-            preload.onload = resolve;
-            preload.onerror = reject;
-            preload.src = sprite;
-          });
-
-          pokemonSprite.src = sprite;
-          pokemonSprite.alt = pokemonName;
-
-          // Sem tooltip.
-          pokemonSprite.removeAttribute("title");
-
-
-          pokemonSprite.classList.remove("loading");
-          return;
+          return {
+            id: pokemon.id,
+            name: formatPokemonName(pokemon.name),
+            sprite,
+            isShiny
+          };
         } catch {
           // Tenta outro Pokémon.
         }
       }
 
-      pokemonSprite.classList.remove("loading");
+      throw new Error("Não foi possível preparar um Pokémon.");
+    }
+
+    function queueNextPokemon() {
+      nextPokemonPromise = preparePokemon();
+    }
+
+    async function getPreparedPokemon(firstLoad = false) {
+      if (firstLoad || !nextPokemonPromise) {
+        return preparePokemon();
+      }
+
+      const prepared = await nextPokemonPromise;
+      return prepared;
+    }
+
+    function getAudioContext() {
+      if (!audioContext) {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContextClass) return null;
+        audioContext = new AudioContextClass();
+      }
+
+      return audioContext;
+    }
+
+    async function playShinySound() {
+      try {
+        const context = getAudioContext();
+        if (!context) return false;
+
+        if (context.state === "suspended") {
+          await context.resume();
+        }
+
+        if (context.state !== "running") {
+          return false;
+        }
+
+        const now = context.currentTime;
+        const notes = [
+          { frequency: 987.77, delay: 0.00, duration: 0.16 },
+          { frequency: 1318.51, delay: 0.08, duration: 0.18 },
+          { frequency: 1567.98, delay: 0.17, duration: 0.22 },
+          { frequency: 2093.00, delay: 0.28, duration: 0.30 }
+        ];
+
+        notes.forEach(({ frequency, delay, duration }, index) => {
+          const oscillator = context.createOscillator();
+          const gain = context.createGain();
+
+          oscillator.type = index % 2 === 0 ? "sine" : "triangle";
+          oscillator.frequency.setValueAtTime(
+            frequency,
+            now + delay
+          );
+
+          gain.gain.setValueAtTime(0.0001, now + delay);
+          gain.gain.exponentialRampToValueAtTime(
+            0.07,
+            now + delay + 0.018
+          );
+          gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + delay + duration
+          );
+
+          oscillator.connect(gain);
+          gain.connect(context.destination);
+
+          oscillator.start(now + delay);
+          oscillator.stop(now + delay + duration + 0.02);
+        });
+
+        pendingShinySound = false;
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    async function triggerShinySound() {
+      const played = await playShinySound();
+
+      /*
+        Firefox/Chrome podem bloquear áudio automático em uma nova aba.
+        Nesse caso o som fica pendente e toca na primeira interação
+        real do usuário.
+      */
+      if (!played) {
+        pendingShinySound = true;
+      }
+    }
+
+    function flushPendingShinySound() {
+      if (!pendingShinySound) return;
+      playShinySound();
+    }
+
+    async function showNextPokemon(firstLoad = false) {
+      if (pokemonChanging) return;
+
+      pokemonChanging = true;
+
+      try {
+        /*
+          O primeiro Pokémon entra normalmente.
+          Nas próximas trocas, fazemos uma saída curta mesmo com
+          o próximo sprite já pré-carregado, para a troca não parecer seca.
+        */
+        if (!firstLoad && pokemonSprite.getAttribute("src")) {
+          pokemonSprite.classList.add("switching");
+          await wait(170);
+        } else {
+          pokemonSprite.classList.add("loading");
+        }
+
+        const prepared = await getPreparedPokemon(firstLoad);
+
+        pokemonSpriteWrap.classList.toggle(
+          "shiny",
+          prepared.isShiny
+        );
+
+        pokemonSprite.src = prepared.sprite;
+        pokemonSprite.alt = prepared.name;
+        pokemonSprite.removeAttribute("title");
+
+        /*
+          Reinicia o efeito shiny caso o novo Pokémon também seja shiny.
+        */
+        if (prepared.isShiny) {
+          pokemonSpriteWrap.classList.remove("shiny");
+          void pokemonSpriteWrap.offsetWidth;
+          pokemonSpriteWrap.classList.add("shiny");
+          triggerShinySound();
+        }
+
+        /*
+          Força o navegador a registrar o estado escondido antes
+          de animar o novo Pokémon de volta para a posição normal.
+        */
+        if (!firstLoad) {
+          void pokemonSprite.offsetWidth;
+          requestAnimationFrame(() => {
+            pokemonSprite.classList.remove("switching");
+          });
+        }
+
+        /*
+          Assim que o atual aparece, o próximo já começa a ser
+          buscado e seu GIF fica carregado em memória.
+        */
+        queueNextPokemon();
+      } catch {
+        pokemonSprite.classList.remove("switching");
+
+        if (!nextPokemonPromise) {
+          queueNextPokemon();
+        }
+      } finally {
+        pokemonSprite.classList.remove("loading");
+        pokemonChanging = false;
+      }
+    }
+
+    function refreshExperience() {
+      updatePhrase(true);
+      showNextPokemon(false);
     }
 
     function openSearch(initialValue = "") {
@@ -441,16 +869,14 @@
 
       searchInput.value = initialValue;
 
-      requestAnimationFrame(() => {
-        searchInput.focus();
+      const focusSearch = () => {
+        searchInput.focus({ preventScroll: true });
+        const cursorPosition = searchInput.value.length;
+        searchInput.setSelectionRange(cursorPosition, cursorPosition);
+      };
 
-        if (initialValue) {
-          searchInput.setSelectionRange(
-            initialValue.length,
-            initialValue.length
-          );
-        }
-      });
+      focusSearch();
+      requestAnimationFrame(focusSearch);
     }
 
     function closeSearch() {
@@ -504,6 +930,8 @@
     });
 
     document.addEventListener("keydown", event => {
+      flushPendingShinySound();
+
       if (
         event.ctrlKey ||
         event.altKey ||
@@ -517,23 +945,67 @@
         return;
       }
 
+      /*
+        Shift + R:
+        novo Pokémon + nova frase, sem recarregar a página.
+      */
+      if (
+        event.shiftKey &&
+        event.key.toLowerCase() === "r"
+      ) {
+        event.preventDefault();
+        refreshExperience();
+        return;
+      }
+
+      /*
+        Atalhos só funcionam com Shift.
+      */
+      if (event.shiftKey) {
+        const shortcut = KEYBOARD_SHORTCUTS[event.key.toLowerCase()];
+
+        if (shortcut) {
+          event.preventDefault();
+          window.location.href = shortcut;
+          return;
+        }
+      }
+
+      /*
+        Space e / continuam abrindo a busca vazia.
+      */
       if (event.key === "/" || event.key === " ") {
         event.preventDefault();
         openSearch();
         return;
       }
 
-      const shortcut = KEYBOARD_SHORTCUTS[event.key.toLowerCase()];
-
-      if (shortcut) {
+      /*
+        Qualquer caractere digitável já abre a pesquisa
+        levando o primeiro caractere junto.
+      */
+      if (event.key.length === 1) {
         event.preventDefault();
-        window.location.href = shortcut;
+        openSearch(event.key);
+      }
+    });
+
+    document.addEventListener(
+      "pointerdown",
+      flushPendingShinySound,
+      { passive: true }
+    );
+
+    pokemonPanel.addEventListener("mouseenter", () => {
+      if (pokemonSpriteWrap.classList.contains("shiny")) {
+        triggerShinySound();
       }
     });
 
     pokemonSprite.addEventListener("click", event => {
       event.stopPropagation();
-      setRandomPokemon();
+      flushPendingShinySound();
+      showNextPokemon(false);
     });
 
     function getWallpaperUrl() {
@@ -660,10 +1132,15 @@
     }
 
     updateClock();
-    setRandomPokemon();
+    updatePhrase(true);
+    showNextPokemon(true);
     syncThemeColorToWallpaper();
 
-    // Atualiza no início de cada novo minuto.
+    /*
+      Atualiza no início de cada novo minuto.
+      Isso também permite que os easter eggs apareçam
+      exatamente no horário certo.
+    */
     const delay = (60 - new Date().getSeconds()) * 1000;
 
     setTimeout(() => {
