@@ -13,9 +13,8 @@
   <style>
     :root {
       /*
-        WALLPAPER:
-        Coloque uma imagem chamada "wallpaper.jpg" na MESMA pasta deste HTML.
-        Se preferir .webp ou .png, troque o nome abaixo.
+        Se você continuar sem wallpaper, pode simplesmente deixar o arquivo ausente.
+        O fundo #101010 continuará sendo usado normalmente.
       */
       --wallpaper: url("./wallpaper.jpg");
 
@@ -112,7 +111,7 @@
       align-items: center;
       justify-content: flex-start;
 
-      width: 160px;
+      width: 190px;
       max-height: 0;
       margin-top: 0;
 
@@ -134,7 +133,24 @@
       object-fit: contain;
       image-rendering: pixelated;
       filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.28));
+
+      cursor: pointer;
+      pointer-events: auto;
+
+      transition:
+        opacity 150ms ease,
+        transform 150ms ease;
     }
+
+    .pokemon-panel img:hover {
+      transform: scale(1.05);
+    }
+
+    .pokemon-panel img.loading {
+      opacity: 0.25;
+      transform: scale(0.94);
+    }
+
 
     #message {
       margin-top: 8px;
@@ -148,10 +164,77 @@
     }
 
     .hero:hover .pokemon-panel {
-      max-height: 180px;
+      max-height: 205px;
       margin-top: 18px;
       opacity: 1;
       transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Busca escondida */
+    .search-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+
+      display: grid;
+      place-items: center;
+
+      padding: 24px;
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+
+      background: rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(6px);
+
+      transition:
+        opacity 180ms ease,
+        visibility 180ms ease;
+    }
+
+    .search-layer.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .search-box {
+      width: min(560px, 88vw);
+      transform: translateY(-4vh) scale(0.98);
+      transition: transform 220ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .search-layer.open .search-box {
+      transform: translateY(-4vh) scale(1);
+    }
+
+    #search-input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      outline: none;
+
+      padding: 15px 18px;
+      border-radius: 16px;
+
+      background: rgba(14, 14, 14, 0.78);
+      color: #fff;
+
+      font: inherit;
+      font-size: 1.02rem;
+
+      box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    #search-input::placeholder {
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    #search-input:focus {
+      border-color: rgba(255, 255, 255, 0.24);
     }
 
     @keyframes enter {
@@ -171,7 +254,7 @@
       }
 
       .pokemon-panel {
-        width: 132px;
+        width: 160px;
       }
 
       .pokemon-panel img {
@@ -180,7 +263,7 @@
       }
 
       .hero:hover .pokemon-panel {
-        max-height: 155px;
+        max-height: 185px;
         margin-top: 14px;
       }
     }
@@ -190,7 +273,10 @@
         animation: none;
       }
 
-      .pokemon-panel {
+      .pokemon-panel,
+      .pokemon-panel img,
+      .search-layer,
+      .search-box {
         transition: none;
       }
     }
@@ -214,11 +300,46 @@
     </section>
   </main>
 
+  <div class="search-layer" id="search-layer" aria-hidden="true">
+    <div class="search-box">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Pesquisar..."
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Pesquisar"
+      />
+    </div>
+  </div>
+
   <script>
     const clock = document.getElementById("clock");
     const pokemonSprite = document.getElementById("pokemon-sprite");
     const message = document.getElementById("message");
     const themeColor = document.getElementById("theme-color");
+
+    const searchLayer = document.getElementById("search-layer");
+    const searchInput = document.getElementById("search-input");
+
+    /*
+      FAVORITOS:
+      Coloque aqui os números da Pokédex dos seus favoritos.
+
+      Exemplo:
+      const FAVORITE_POKEMON_IDS = [94, 143, 254];
+
+      Quando essa lista tiver algum Pokémon, existe 5% de chance
+      de uma nova aba sortear um deles.
+    */
+    const FAVORITE_POKEMON_IDS = [];
+    const FAVORITE_CHANCE = 0.05;
+
+    const KEYBOARD_SHORTCUTS = {
+      y: "https://youtube.com",
+      g: "https://github.com",
+      s: "https://open.spotify.com"
+    };
 
     function getMessage(hour) {
       if (hour >= 5 && hour < 12) return "Bom dia.";
@@ -239,14 +360,32 @@
       message.textContent = getMessage(now.getHours());
     }
 
+    function getRandomPokemonId() {
+      const shouldUseFavorite =
+        FAVORITE_POKEMON_IDS.length > 0 &&
+        Math.random() < FAVORITE_CHANCE;
+
+      if (shouldUseFavorite) {
+        return FAVORITE_POKEMON_IDS[
+          Math.floor(Math.random() * FAVORITE_POKEMON_IDS.length)
+        ];
+      }
+
+      return Math.floor(Math.random() * 1025) + 1;
+    }
+
+    function formatPokemonName(name) {
+      return name
+        .split("-")
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+    }
+
     async function setRandomPokemon() {
-      /*
-        Procura um Pokémon aleatório com sprite animado.
-        Prioriza a coleção Showdown e usa os sprites animados
-        de Black/White como fallback.
-      */
+      pokemonSprite.classList.add("loading");
+
       for (let attempt = 0; attempt < 12; attempt++) {
-        const pokemonId = Math.floor(Math.random() * 1025) + 1;
+        const pokemonId = getRandomPokemonId();
 
         try {
           const response = await fetch(
@@ -268,17 +407,134 @@
 
           if (!sprite) continue;
 
+          const pokemonName = formatPokemonName(pokemon.name);
+
+          // Pré-carrega o GIF antes de trocar o atual.
+          const preload = new Image();
+
+          await new Promise((resolve, reject) => {
+            preload.onload = resolve;
+            preload.onerror = reject;
+            preload.src = sprite;
+          });
+
           pokemonSprite.src = sprite;
-          pokemonSprite.alt = pokemon.name;
-          pokemonSprite.title = pokemon.name;
+          pokemonSprite.alt = pokemonName;
+
+          // Sem tooltip.
+          pokemonSprite.removeAttribute("title");
+
+
+          pokemonSprite.classList.remove("loading");
           return;
         } catch {
           // Tenta outro Pokémon.
         }
       }
 
-      pokemonSprite.removeAttribute("src");
+      pokemonSprite.classList.remove("loading");
     }
+
+    function openSearch(initialValue = "") {
+      searchLayer.classList.add("open");
+      searchLayer.setAttribute("aria-hidden", "false");
+
+      searchInput.value = initialValue;
+
+      requestAnimationFrame(() => {
+        searchInput.focus();
+
+        if (initialValue) {
+          searchInput.setSelectionRange(
+            initialValue.length,
+            initialValue.length
+          );
+        }
+      });
+    }
+
+    function closeSearch() {
+      searchLayer.classList.remove("open");
+      searchLayer.setAttribute("aria-hidden", "true");
+      searchInput.value = "";
+      searchInput.blur();
+    }
+
+    function runSearch() {
+      const query = searchInput.value.trim();
+
+      if (!query) {
+        closeSearch();
+        return;
+      }
+
+      const looksLikeUrl =
+        /^https?:\/\//i.test(query) ||
+        /^[^\s]+\.[^\s]+$/.test(query);
+
+      if (looksLikeUrl) {
+        const target = /^https?:\/\//i.test(query)
+          ? query
+          : `https://${query}`;
+
+        window.location.href = target;
+        return;
+      }
+
+      window.location.href =
+        `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+    }
+
+    searchInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        runSearch();
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSearch();
+      }
+    });
+
+    searchLayer.addEventListener("mousedown", event => {
+      if (event.target === searchLayer) {
+        closeSearch();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (
+        event.ctrlKey ||
+        event.altKey ||
+        event.metaKey ||
+        event.isComposing
+      ) {
+        return;
+      }
+
+      if (document.activeElement === searchInput) {
+        return;
+      }
+
+      if (event.key === "/" || event.key === " ") {
+        event.preventDefault();
+        openSearch();
+        return;
+      }
+
+      const shortcut = KEYBOARD_SHORTCUTS[event.key.toLowerCase()];
+
+      if (shortcut) {
+        event.preventDefault();
+        window.location.href = shortcut;
+      }
+    });
+
+    pokemonSprite.addEventListener("click", event => {
+      event.stopPropagation();
+      setRandomPokemon();
+    });
 
     function getWallpaperUrl() {
       const value = getComputedStyle(document.documentElement)
