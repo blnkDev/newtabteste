@@ -111,7 +111,7 @@
       align-items: center;
       justify-content: flex-start;
 
-      width: 190px;
+      width: min(420px, 88vw);
       max-height: 0;
       margin-top: 0;
 
@@ -268,7 +268,9 @@
     #message {
       margin-top: 8px;
       text-align: center;
-      white-space: nowrap;
+      white-space: normal;
+      max-width: 420px;
+      line-height: 1.25;
 
       font-size: clamp(1rem, 1.35vw, 1.35rem);
       font-weight: 650;
@@ -277,7 +279,7 @@
     }
 
     .hero:hover .pokemon-panel {
-      max-height: 205px;
+      max-height: 240px;
       margin-top: 18px;
       opacity: 1;
       transform: translateY(0) scale(1);
@@ -367,7 +369,7 @@
       }
 
       .pokemon-panel {
-        width: 160px;
+        width: min(88vw, 360px);
       }
 
       .pokemon-sprite-wrap,
@@ -377,7 +379,7 @@
       }
 
       .hero:hover .pokemon-panel {
-        max-height: 185px;
+        max-height: 220px;
         margin-top: 14px;
       }
     }
