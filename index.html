@@ -365,15 +365,15 @@
 
 
     /* =========================
-       GACHA V1
+       GACHA V2 — PROGRESSÃO
        ========================= */
 
     .hero.details-open:hover .pokemon-panel {
-      max-height: 410px;
+      max-height: 470px;
     }
 
     .roll-card {
-      width: min(320px, 82vw);
+      width: min(350px, 84vw);
       max-height: 0;
       margin-top: 0;
       opacity: 0;
@@ -388,7 +388,7 @@
     }
 
     .hero.details-open .roll-card {
-      max-height: 155px;
+      max-height: 225px;
       margin-top: 14px;
       opacity: 1;
       transform: translateY(0);
@@ -401,14 +401,14 @@
     }
 
     #roll-name {
-      font-size: 0.90rem;
+      font-size: 0.92rem;
       font-weight: 650;
       letter-spacing: -0.015em;
     }
 
     #roll-rarity {
       margin-top: 3px;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 650;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -416,14 +416,33 @@
     }
 
     #roll-rarity.shiny {
-      opacity: 0.92;
+      opacity: 0.94;
+    }
+
+    #roll-rarity.wishlist-hit {
+      opacity: 0.90;
     }
 
     #gacha-stats {
       margin-top: 8px;
       font-size: 0.72rem;
-      font-weight: 550;
-      opacity: 0.48;
+      font-weight: 560;
+      opacity: 0.52;
+    }
+
+    #recharge-status {
+      min-height: 14px;
+      margin-top: 3px;
+      font-size: 0.66rem;
+      font-weight: 520;
+      opacity: 0.38;
+    }
+
+    #level-status {
+      margin-top: 7px;
+      font-size: 0.67rem;
+      font-weight: 600;
+      opacity: 0.42;
     }
 
     .roll-actions {
@@ -477,8 +496,18 @@
       background: #fff;
     }
 
-    /* Collection */
-    .collection-layer {
+    .gacha-shortcuts {
+      margin-top: 9px;
+      font-size: 0.61rem;
+      font-weight: 550;
+      opacity: 0.25;
+    }
+
+    /* Camadas do jogo */
+    .collection-layer,
+    .profile-layer,
+    .wishlist-layer,
+    .menu-layer {
       position: fixed;
       inset: 0;
       z-index: 30;
@@ -500,15 +529,21 @@
         visibility 180ms ease;
     }
 
-    .collection-layer.open {
+    .collection-layer.open,
+    .profile-layer.open,
+    .wishlist-layer.open,
+    .menu-layer.open {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
     }
 
-    .collection-window {
+    .collection-window,
+    .profile-window,
+    .wishlist-window,
+    .menu-window {
       width: min(760px, 92vw);
-      max-height: min(680px, 82vh);
+      max-height: min(700px, 84vh);
       display: flex;
       flex-direction: column;
 
@@ -516,17 +551,33 @@
       border-radius: 22px;
       overflow: hidden;
 
-      background: rgba(14, 14, 14, 0.90);
+      background: rgba(14, 14, 14, 0.92);
       box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
 
       transform: translateY(8px) scale(0.985);
       transition: transform 220ms cubic-bezier(.22, 1, .36, 1);
     }
 
-    .collection-layer.open .collection-window {
+    .profile-window {
+      width: min(680px, 92vw);
+    }
+
+    .wishlist-window {
+      width: min(610px, 92vw);
+    }
+
+    .menu-window {
+      width: min(430px, 92vw);
+    }
+
+    .collection-layer.open .collection-window,
+    .profile-layer.open .profile-window,
+    .wishlist-layer.open .wishlist-window,
+    .menu-layer.open .menu-window {
       transform: translateY(0) scale(1);
     }
 
+    .game-window-header,
     .collection-header {
       display: flex;
       align-items: flex-start;
@@ -536,24 +587,101 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .collection-title {
+    .collection-title,
+    .game-window-title {
       font-size: 1.02rem;
       font-weight: 700;
       letter-spacing: -0.025em;
     }
 
-    #collection-stats {
+    #collection-stats,
+    .game-window-subtitle {
       margin-top: 5px;
       font-size: 0.73rem;
       opacity: 0.48;
     }
 
-    .collection-header-actions {
+    .collection-header-actions,
+    .game-window-actions {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
       gap: 8px;
     }
 
+
+    /* Main Menu */
+    .menu-content {
+      padding: 12px;
+    }
+
+    .menu-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .menu-item {
+      appearance: none;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: 14px;
+      padding: 12px 13px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+
+      background: rgba(255, 255, 255, 0.025);
+      color: rgba(255, 255, 255, 0.88);
+
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+
+      transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        transform 150ms ease;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.13);
+      transform: translateY(-1px);
+    }
+
+    .menu-item-main {
+      min-width: 0;
+    }
+
+    .menu-item-title {
+      font-size: 0.82rem;
+      font-weight: 680;
+    }
+
+    .menu-item-description {
+      margin-top: 3px;
+      font-size: 0.66rem;
+      opacity: 0.38;
+    }
+
+    .menu-item-shortcut {
+      flex: 0 0 auto;
+      font-size: 0.64rem;
+      font-weight: 650;
+      opacity: 0.30;
+    }
+
+    #menu-resources {
+      margin: 11px 4px 2px;
+      text-align: center;
+      font-size: 0.68rem;
+      opacity: 0.38;
+    }
+
+    /* Collection */
     .collection-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
@@ -564,7 +692,8 @@
       overscroll-behavior: contain;
     }
 
-    .collection-empty {
+    .collection-empty,
+    .wishlist-empty {
       grid-column: 1 / -1;
       padding: 54px 20px;
       text-align: center;
@@ -613,19 +742,239 @@
       opacity: 0.42;
     }
 
-    /* Feedback curto, sem poluir a interface */
+    /* Profile */
+    .profile-content {
+      padding: 18px 20px 22px;
+      overflow-y: auto;
+    }
+
+    .profile-level-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    #profile-level {
+      font-size: 1.55rem;
+      font-weight: 750;
+      letter-spacing: -0.045em;
+    }
+
+    #profile-title {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      opacity: 0.46;
+    }
+
+    #profile-xp-text {
+      font-size: 0.72rem;
+      opacity: 0.48;
+      text-align: right;
+    }
+
+    .xp-track {
+      height: 7px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.075);
+    }
+
+    #profile-xp-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: rgba(255, 255, 255, 0.78);
+      transition: width 300ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .profile-section {
+      margin-top: 20px;
+    }
+
+    .profile-section-title {
+      margin-bottom: 9px;
+      font-size: 0.69rem;
+      font-weight: 700;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+      opacity: 0.36;
+    }
+
+    .profile-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .profile-metric {
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .profile-metric-label {
+      font-size: 0.64rem;
+      opacity: 0.38;
+    }
+
+    .profile-metric-value {
+      margin-top: 4px;
+      font-size: 0.88rem;
+      font-weight: 680;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pity-list,
+    .progression-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .pity-row,
+    .progression-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.025);
+      font-size: 0.72rem;
+    }
+
+    .pity-row span:last-child,
+    .progression-row span:last-child {
+      opacity: 0.48;
+      text-align: right;
+    }
+
+    /* Wishlist */
+    .wishlist-content {
+      padding: 18px 20px 22px;
+      overflow-y: auto;
+    }
+
+    .wishlist-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    #wishlist-input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      outline: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+
+      background: rgba(255, 255, 255, 0.035);
+      color: white;
+      font: inherit;
+      font-size: 0.82rem;
+    }
+
+    #wishlist-input::placeholder {
+      color: rgba(255, 255, 255, 0.34);
+    }
+
+    #wishlist-input:focus {
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    #wishlist-help {
+      margin-top: 8px;
+      font-size: 0.68rem;
+      line-height: 1.45;
+      opacity: 0.40;
+    }
+
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .wishlist-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .wishlist-item img {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    .wishlist-item-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .wishlist-item-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.72rem;
+      font-weight: 650;
+    }
+
+    .wishlist-item-number {
+      margin-top: 2px;
+      font-size: 0.62rem;
+      opacity: 0.35;
+    }
+
+    .wishlist-remove {
+      appearance: none;
+      border: 0;
+      padding: 4px 5px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.36);
+      font: inherit;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .wishlist-remove:hover {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .wishlist-locked {
+      padding: 44px 18px;
+      text-align: center;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      opacity: 0.46;
+    }
+
+    /* Feedback curto */
     .toast {
       position: fixed;
       left: 50%;
       bottom: 28px;
       z-index: 50;
 
-      max-width: min(420px, 86vw);
+      max-width: min(440px, 86vw);
       padding: 9px 13px;
       border: 1px solid rgba(255, 255, 255, 0.10);
       border-radius: 999px;
 
-      background: rgba(14, 14, 14, 0.82);
+      background: rgba(14, 14, 14, 0.84);
       color: rgba(255, 255, 255, 0.84);
       backdrop-filter: blur(10px);
 
@@ -668,21 +1017,34 @@
       }
 
       .hero.details-open:hover .pokemon-panel {
-        max-height: 385px;
+        max-height: 445px;
       }
 
-      .collection-layer {
+      .collection-layer,
+      .profile-layer,
+      .wishlist-layer,
+      .menu-layer {
         padding: 16px;
       }
 
-      .collection-window {
+      .collection-window,
+      .profile-window,
+      .wishlist-window {
         width: 94vw;
-        max-height: 84vh;
+        max-height: 86vh;
       }
 
       .collection-grid {
         grid-template-columns: repeat(auto-fill, minmax(102px, 1fr));
         padding: 13px;
+      }
+
+      .profile-metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .wishlist-form {
+        flex-direction: column;
       }
 
     }
@@ -737,7 +1099,9 @@
           <div class="roll-card-inner">
             <div id="roll-name">Pokémon</div>
             <div id="roll-rarity">Common</div>
-            <div id="gacha-stats">10 rolls · 2 claims · 0 coins</div>
+            <div id="gacha-stats">6/6 rolls · 2/2 claims · 0 coins</div>
+            <div id="recharge-status"></div>
+            <div id="level-status">Lv. 1 · 0 / 100 XP</div>
 
             <div class="roll-actions">
               <button class="gacha-button primary" id="claim-button" type="button">
@@ -749,6 +1113,10 @@
               <button class="gacha-button" id="buy-roll-button" type="button">
                 +1 roll · 100
               </button>
+            </div>
+
+            <div class="gacha-shortcuts">
+              Shift+M Menu · Shift+R Roll
             </div>
           </div>
         </div>
@@ -767,6 +1135,59 @@
         aria-label="Pesquisar"
       />
     </div>
+  </div>
+
+  <div class="menu-layer" id="menu-layer" aria-hidden="true">
+    <section class="menu-window" aria-label="Menu principal do jogo">
+      <header class="game-window-header">
+        <div>
+          <div class="game-window-title">Menu</div>
+          <div class="game-window-subtitle" id="menu-subtitle">
+            Lv. 1 · Novice Trainer
+          </div>
+        </div>
+
+        <div class="game-window-actions">
+          <button class="gacha-button" id="menu-close" type="button">
+            Fechar
+          </button>
+        </div>
+      </header>
+
+      <div class="menu-content">
+        <div class="menu-list">
+          <button class="menu-item" id="menu-profile" type="button">
+            <span class="menu-item-main">
+              <span class="menu-item-title">Profile</span>
+              <span class="menu-item-description">Level, XP, pity e progressão</span>
+            </span>
+            <span class="menu-item-shortcut">Shift+P</span>
+          </button>
+
+          <button class="menu-item" id="menu-collection" type="button">
+            <span class="menu-item-main">
+              <span class="menu-item-title">Collection</span>
+              <span class="menu-item-description">Pokémon que você já claimou</span>
+            </span>
+            <span class="menu-item-shortcut">Shift+C</span>
+          </button>
+
+          <button class="menu-item" id="menu-wishlist" type="button">
+            <span class="menu-item-main">
+              <span class="menu-item-title">Wishlist</span>
+              <span class="menu-item-description" id="menu-wishlist-description">
+                Desbloqueia no Level 10
+              </span>
+            </span>
+            <span class="menu-item-shortcut">Shift+W</span>
+          </button>
+        </div>
+
+        <div id="menu-resources">
+          6/6 rolls · 2/2 claims · 0 coins
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="collection-layer" id="collection-layer" aria-hidden="true">
@@ -791,6 +1212,165 @@
     </section>
   </div>
 
+  <div class="profile-layer" id="profile-layer" aria-hidden="true">
+    <section class="profile-window" aria-label="Perfil do gacha">
+      <header class="game-window-header">
+        <div>
+          <div class="game-window-title">Profile</div>
+          <div class="game-window-subtitle" id="profile-subtitle">Trainer progression</div>
+        </div>
+
+        <div class="game-window-actions">
+          <button class="gacha-button" id="profile-wishlist" type="button">
+            Wishlist
+          </button>
+          <button class="gacha-button" id="profile-collection" type="button">
+            Collection
+          </button>
+          <button class="gacha-button" id="profile-close" type="button">
+            Fechar
+          </button>
+        </div>
+      </header>
+
+      <div class="profile-content">
+        <div class="profile-level-row">
+          <div>
+            <div id="profile-level">Level 1</div>
+            <div id="profile-title">Novice Trainer</div>
+          </div>
+          <div id="profile-xp-text">0 / 100 XP</div>
+        </div>
+
+        <div class="xp-track">
+          <div id="profile-xp-fill"></div>
+        </div>
+
+        <section class="profile-section">
+          <div class="profile-section-title">Resources</div>
+          <div class="profile-metrics">
+            <div class="profile-metric">
+              <div class="profile-metric-label">Rolls</div>
+              <div class="profile-metric-value" id="profile-rolls">6 / 6</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Next roll</div>
+              <div class="profile-metric-value" id="profile-next-roll">Full</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Claims</div>
+              <div class="profile-metric-value" id="profile-claims">2 / 2</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Next claim</div>
+              <div class="profile-metric-value" id="profile-next-claim">Full</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Coins</div>
+              <div class="profile-metric-value" id="profile-coins">0</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Wishlist</div>
+              <div class="profile-metric-value" id="profile-wishlist-slots">Locked</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <div class="profile-section-title">Stats</div>
+          <div class="profile-metrics">
+            <div class="profile-metric">
+              <div class="profile-metric-label">Total rolls</div>
+              <div class="profile-metric-value" id="profile-total-rolls">0</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Total claims</div>
+              <div class="profile-metric-value" id="profile-total-claims">0</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Collection</div>
+              <div class="profile-metric-value" id="profile-collection-count">0</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Shinies</div>
+              <div class="profile-metric-value" id="profile-shinies">0</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Legendary</div>
+              <div class="profile-metric-value" id="profile-legendary">0</div>
+            </div>
+            <div class="profile-metric">
+              <div class="profile-metric-label">Mythical</div>
+              <div class="profile-metric-value" id="profile-mythical">0</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <div class="profile-section-title">Pity</div>
+          <div class="pity-list">
+            <div class="pity-row">
+              <span>Epic+</span>
+              <span id="profile-pity-epic">0 / 25</span>
+            </div>
+            <div class="pity-row">
+              <span>Legendary / Mythical</span>
+              <span id="profile-pity-legendary">0 / 80</span>
+            </div>
+            <div class="pity-row">
+              <span>Shiny</span>
+              <span id="profile-pity-shiny">0 / 150</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-section">
+          <div class="profile-section-title">Progression</div>
+          <div class="progression-list" id="profile-progression"></div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <div class="wishlist-layer" id="wishlist-layer" aria-hidden="true">
+    <section class="wishlist-window" aria-label="Wishlist de Pokémon">
+      <header class="game-window-header">
+        <div>
+          <div class="game-window-title">Wishlist</div>
+          <div class="game-window-subtitle" id="wishlist-subtitle">Unlocks at Level 10</div>
+        </div>
+
+        <div class="game-window-actions">
+          <button class="gacha-button" id="wishlist-close" type="button">
+            Fechar
+          </button>
+        </div>
+      </header>
+
+      <div class="wishlist-content" id="wishlist-content">
+        <div class="wishlist-form" id="wishlist-form">
+          <input
+            id="wishlist-input"
+            type="text"
+            placeholder="Nome ou número do Pokémon"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Adicionar Pokémon à wishlist"
+          />
+          <button class="gacha-button primary" id="wishlist-add" type="button">
+            Adicionar
+          </button>
+        </div>
+
+        <div id="wishlist-help">
+          Pokémon da wishlist têm uma chance extra de aparecer nos seus rolls.
+        </div>
+
+        <div class="wishlist-grid" id="wishlist-grid"></div>
+      </div>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -805,6 +1385,8 @@
     const rollName = document.getElementById("roll-name");
     const rollRarity = document.getElementById("roll-rarity");
     const gachaStats = document.getElementById("gacha-stats");
+    const rechargeStatus = document.getElementById("recharge-status");
+    const levelStatus = document.getElementById("level-status");
     const claimButton = document.getElementById("claim-button");
     const rollButton = document.getElementById("roll-button");
     const buyRollButton = document.getElementById("buy-roll-button");
@@ -812,29 +1394,81 @@
     const searchLayer = document.getElementById("search-layer");
     const searchInput = document.getElementById("search-input");
 
+    const menuLayer = document.getElementById("menu-layer");
+    const menuClose = document.getElementById("menu-close");
+    const menuProfile = document.getElementById("menu-profile");
+    const menuCollection = document.getElementById("menu-collection");
+    const menuWishlist = document.getElementById("menu-wishlist");
+    const menuSubtitle = document.getElementById("menu-subtitle");
+    const menuResources = document.getElementById("menu-resources");
+    const menuWishlistDescription =
+      document.getElementById("menu-wishlist-description");
+
     const collectionLayer = document.getElementById("collection-layer");
     const collectionGrid = document.getElementById("collection-grid");
     const collectionStats = document.getElementById("collection-stats");
     const collectionClose = document.getElementById("collection-close");
     const collectionBuyRoll = document.getElementById("collection-buy-roll");
 
+    const profileLayer = document.getElementById("profile-layer");
+    const profileClose = document.getElementById("profile-close");
+    const profileCollection = document.getElementById("profile-collection");
+    const profileWishlist = document.getElementById("profile-wishlist");
+    const profileLevel = document.getElementById("profile-level");
+    const profileTitle = document.getElementById("profile-title");
+    const profileXpText = document.getElementById("profile-xp-text");
+    const profileXpFill = document.getElementById("profile-xp-fill");
+    const profileRolls = document.getElementById("profile-rolls");
+    const profileNextRoll = document.getElementById("profile-next-roll");
+    const profileClaims = document.getElementById("profile-claims");
+    const profileNextClaim = document.getElementById("profile-next-claim");
+    const profileCoins = document.getElementById("profile-coins");
+    const profileWishlistSlots = document.getElementById("profile-wishlist-slots");
+    const profileTotalRolls = document.getElementById("profile-total-rolls");
+    const profileTotalClaims = document.getElementById("profile-total-claims");
+    const profileCollectionCount = document.getElementById("profile-collection-count");
+    const profileShinies = document.getElementById("profile-shinies");
+    const profileLegendary = document.getElementById("profile-legendary");
+    const profileMythical = document.getElementById("profile-mythical");
+    const profilePityEpic = document.getElementById("profile-pity-epic");
+    const profilePityLegendary = document.getElementById("profile-pity-legendary");
+    const profilePityShiny = document.getElementById("profile-pity-shiny");
+    const profileProgression = document.getElementById("profile-progression");
+
+    const wishlistLayer = document.getElementById("wishlist-layer");
+    const wishlistClose = document.getElementById("wishlist-close");
+    const wishlistSubtitle = document.getElementById("wishlist-subtitle");
+    const wishlistContent = document.getElementById("wishlist-content");
+    const wishlistForm = document.getElementById("wishlist-form");
+    const wishlistInput = document.getElementById("wishlist-input");
+    const wishlistAdd = document.getElementById("wishlist-add");
+    const wishlistHelp = document.getElementById("wishlist-help");
+    const wishlistGrid = document.getElementById("wishlist-grid");
+
     const toast = document.getElementById("toast");
 
     /* =========================
-       CONFIGURAÇÃO DO GACHA
+       CONFIGURAÇÃO V2
        ========================= */
 
-    const STORAGE_KEY = "newtab-pokemon-gacha-v1";
+    const STORAGE_KEY = "newtab-pokemon-gacha-v2";
+    const LEGACY_STORAGE_KEY = "newtab-pokemon-gacha-v1";
 
-    const DAILY_ROLLS = 10;
-    const DAILY_CLAIMS = 2;
+    const BASE_ROLL_CAP = 6;
+    const BASE_CLAIM_CAP = 2;
+    const BASE_ROLL_RECHARGE_MS = 2 * 60 * 60 * 1000;
+    const BASE_CLAIM_RECHARGE_MS = 12 * 60 * 60 * 1000;
+
     const EXTRA_ROLL_PRICE = 100;
+    const BASE_SHINY_CHANCE = 0.02;
+    const WISHLIST_ROLL_CHANCE = 0.02;
 
-    const FAVORITE_POKEMON_IDS = [];
-    const FAVORITE_CHANCE = 0.05;
-
-    // 2% por roll.
-    const SHINY_CHANCE = 0.02;
+    const EPIC_PITY_SOFT = 15;
+    const EPIC_PITY_HARD = 25;
+    const LEGENDARY_PITY_SOFT = 50;
+    const LEGENDARY_PITY_HARD = 80;
+    const SHINY_PITY_SOFT = 60;
+    const SHINY_PITY_HARD = 150;
 
     const DUPLICATE_REWARDS = {
       Common: 20,
@@ -843,6 +1477,15 @@
       Epic: 90,
       Legendary: 140,
       Mythical: 180
+    };
+
+    const ROLL_XP = {
+      Common: 5,
+      Uncommon: 6,
+      Rare: 8,
+      Epic: 11,
+      Legendary: 18,
+      Mythical: 22
     };
 
     const KEYBOARD_SHORTCUTS = {
@@ -910,8 +1553,24 @@
       "23:59": "Último minuto do dia."
     };
 
+    const PROGRESSION = [
+      { level: 5, text: "+1 capacidade de roll" },
+      { level: 10, text: "Wishlist · 3 slots" },
+      { level: 15, text: "Recarga de roll: 1h55" },
+      { level: 20, text: "+1 capacidade de roll" },
+      { level: 25, text: "+1 capacidade de claim" },
+      { level: 30, text: "+10% coins de duplicatas" },
+      { level: 35, text: "Recarga de roll: 1h50" },
+      { level: 40, text: "+1 slot de wishlist" },
+      { level: 50, text: "+1 capacidade de roll" },
+      { level: 55, text: "+20% coins de duplicatas" },
+      { level: 60, text: "+1 capacidade de claim" },
+      { level: 65, text: "+1 slot de wishlist" },
+      { level: 70, text: "Recarga de roll: 1h45" }
+    ];
+
     /* =========================
-       ESTADO
+       ESTADO / MIGRAÇÃO
        ========================= */
 
     let currentPhrase = "";
@@ -923,37 +1582,150 @@
     let pendingShinySound = false;
     let audioContext = null;
     let toastTimer = null;
-
     let speciesCountPromise = null;
 
-    const defaultState = () => ({
-      version: 1,
-      lastReset: "",
-      rollsLeft: DAILY_ROLLS,
-      claimsLeft: DAILY_CLAIMS,
-      coins: 0,
-      totalRolls: 0,
-      collection: [],
-      currentRoll: null
-    });
+    function defaultState() {
+      return {
+        version: 2,
+        level: 1,
+        xp: 0,
+        lifetimeXp: 0,
+
+        rolls: BASE_ROLL_CAP,
+        claims: BASE_CLAIM_CAP,
+        rollNextAt: null,
+        claimNextAt: null,
+
+        coins: 0,
+        totalRolls: 0,
+        totalClaims: 0,
+        totalCoinsEarned: 0,
+
+        currentRoll: null,
+        collection: [],
+        wishlist: [],
+
+        pity: {
+          epic: 0,
+          legendary: 0,
+          shiny: 0
+        },
+
+        stats: {
+          shinyRolls: 0,
+          legendaryRolls: 0,
+          mythicalRolls: 0
+        }
+      };
+    }
+
+    function xpNeeded(level) {
+      return 100 + (level - 1) * 45;
+    }
+
+    function stateFromTotalXp(totalXp) {
+      let level = 1;
+      let remaining = Math.max(0, Math.floor(totalXp));
+
+      while (remaining >= xpNeeded(level) && level < 999) {
+        remaining -= xpNeeded(level);
+        level += 1;
+      }
+
+      return { level, xp: remaining };
+    }
+
+    function migrateLegacyState() {
+      try {
+        const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+        if (!raw) return null;
+
+        const old = JSON.parse(raw);
+        const next = defaultState();
+        const now = Date.now();
+
+        next.coins = Number(old.coins) || 0;
+        next.totalRolls = Number(old.totalRolls) || 0;
+        next.totalClaims = Number(old.totalClaims) || 0;
+        next.collection = Array.isArray(old.collection) ? old.collection : [];
+        next.currentRoll = old.currentRoll || null;
+
+        const legacyXp =
+          next.totalRolls * 5 +
+          next.totalClaims * 10 +
+          next.collection.length * 8;
+
+        const migratedLevel = stateFromTotalXp(legacyXp);
+        next.level = migratedLevel.level;
+        next.xp = migratedLevel.xp;
+        next.lifetimeXp = legacyXp;
+
+        const caps = getProgressionForLevel(next.level);
+
+        next.rolls = Math.min(
+          caps.rollCap,
+          Math.max(0, Number(old.rollsLeft ?? BASE_ROLL_CAP))
+        );
+        next.claims = Math.min(
+          caps.claimCap,
+          Math.max(0, Number(old.claimsLeft ?? BASE_CLAIM_CAP))
+        );
+
+        if (next.rolls < caps.rollCap) {
+          next.rollNextAt = now + caps.rollRechargeMs;
+        }
+
+        if (next.claims < caps.claimCap) {
+          next.claimNextAt = now + BASE_CLAIM_RECHARGE_MS;
+        }
+
+        return next;
+      } catch {
+        return null;
+      }
+    }
+
+    function normalizeState(input) {
+      const base = defaultState();
+      const merged = {
+        ...base,
+        ...(input || {}),
+        pity: {
+          ...base.pity,
+          ...((input || {}).pity || {})
+        },
+        stats: {
+          ...base.stats,
+          ...((input || {}).stats || {})
+        },
+        collection: Array.isArray(input?.collection) ? input.collection : [],
+        wishlist: Array.isArray(input?.wishlist) ? input.wishlist : []
+      };
+
+      merged.level = Math.max(1, Number(merged.level) || 1);
+      merged.xp = Math.max(0, Number(merged.xp) || 0);
+      merged.lifetimeXp = Math.max(0, Number(merged.lifetimeXp) || 0);
+      merged.rolls = Math.max(0, Number(merged.rolls) || 0);
+      merged.claims = Math.max(0, Number(merged.claims) || 0);
+      merged.coins = Math.max(0, Number(merged.coins) || 0);
+      merged.totalRolls = Math.max(0, Number(merged.totalRolls) || 0);
+      merged.totalClaims = Math.max(0, Number(merged.totalClaims) || 0);
+
+      return merged;
+    }
 
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return defaultState();
+        if (raw) {
+          return normalizeState(JSON.parse(raw));
+        }
 
-        const parsed = JSON.parse(raw);
+        const migrated = migrateLegacyState();
+        if (migrated) return normalizeState(migrated);
+      } catch {}
 
-        return {
-          ...defaultState(),
-          ...parsed,
-          collection: Array.isArray(parsed.collection)
-            ? parsed.collection
-            : []
-        };
-      } catch {
-        return defaultState();
-      }
+      return defaultState();
     }
 
     let state = loadState();
@@ -964,28 +1736,221 @@
       } catch {}
     }
 
-    function getLocalDateKey() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
+    /* =========================
+       PROGRESSÃO / RECURSOS
+       ========================= */
 
-      return `${year}-${month}-${day}`;
+    function getProgressionForLevel(level = state.level) {
+      let rollCap = BASE_ROLL_CAP;
+      let claimCap = BASE_CLAIM_CAP;
+      let rollRechargeMs = BASE_ROLL_RECHARGE_MS;
+      let wishlistSlots = 0;
+      let coinMultiplier = 1;
+
+      if (level >= 5) rollCap += 1;
+      if (level >= 10) wishlistSlots = 3;
+      if (level >= 15) rollRechargeMs = 115 * 60 * 1000;
+      if (level >= 20) rollCap += 1;
+      if (level >= 25) claimCap += 1;
+      if (level >= 30) coinMultiplier = 1.10;
+      if (level >= 35) rollRechargeMs = 110 * 60 * 1000;
+      if (level >= 40) wishlistSlots = 4;
+      if (level >= 50) rollCap += 1;
+      if (level >= 55) coinMultiplier = 1.20;
+      if (level >= 60) claimCap += 1;
+      if (level >= 65) wishlistSlots = 5;
+      if (level >= 70) rollRechargeMs = 105 * 60 * 1000;
+
+      return {
+        rollCap,
+        claimCap,
+        rollRechargeMs,
+        claimRechargeMs: BASE_CLAIM_RECHARGE_MS,
+        wishlistSlots,
+        coinMultiplier
+      };
     }
 
-    function resetDailyIfNeeded() {
-      const today = getLocalDateKey();
+    function getTrainerTitle(level = state.level) {
+      if (level >= 70) return "Master Collector";
+      if (level >= 50) return "Elite Collector";
+      if (level >= 35) return "Veteran Trainer";
+      if (level >= 25) return "Rare Hunter";
+      if (level >= 15) return "Collector";
+      if (level >= 10) return "Pokédex Hunter";
+      if (level >= 5) return "Trainer";
+      return "Novice Trainer";
+    }
 
-      if (state.lastReset !== today) {
-        state.lastReset = today;
-        state.rollsLeft = DAILY_ROLLS;
-        state.claimsLeft = DAILY_CLAIMS;
-        saveState();
+    function reconcileResources(now = Date.now()) {
+      const progression = getProgressionForLevel();
+      let changed = false;
+
+      state.rolls = Math.min(state.rolls, progression.rollCap);
+      state.claims = Math.min(state.claims, progression.claimCap);
+
+      if (state.rolls >= progression.rollCap) {
+        if (state.rollNextAt !== null) {
+          state.rollNextAt = null;
+          changed = true;
+        }
+      } else {
+        if (!state.rollNextAt) {
+          state.rollNextAt = now + progression.rollRechargeMs;
+          changed = true;
+        }
+
+        while (
+          state.rolls < progression.rollCap &&
+          state.rollNextAt &&
+          now >= state.rollNextAt
+        ) {
+          state.rolls += 1;
+          changed = true;
+
+          if (state.rolls >= progression.rollCap) {
+            state.rollNextAt = null;
+          } else {
+            state.rollNextAt += progression.rollRechargeMs;
+          }
+        }
       }
+
+      if (state.claims >= progression.claimCap) {
+        if (state.claimNextAt !== null) {
+          state.claimNextAt = null;
+          changed = true;
+        }
+      } else {
+        if (!state.claimNextAt) {
+          state.claimNextAt = now + progression.claimRechargeMs;
+          changed = true;
+        }
+
+        while (
+          state.claims < progression.claimCap &&
+          state.claimNextAt &&
+          now >= state.claimNextAt
+        ) {
+          state.claims += 1;
+          changed = true;
+
+          if (state.claims >= progression.claimCap) {
+            state.claimNextAt = null;
+          } else {
+            state.claimNextAt += progression.claimRechargeMs;
+          }
+        }
+      }
+
+      if (changed) saveState();
+      return changed;
+    }
+
+    function spendRoll() {
+      reconcileResources();
+      const progression = getProgressionForLevel();
+
+      if (state.rolls <= 0) return false;
+
+      const wasFull = state.rolls >= progression.rollCap;
+      state.rolls -= 1;
+
+      if (wasFull || !state.rollNextAt) {
+        state.rollNextAt = Date.now() + progression.rollRechargeMs;
+      }
+
+      saveState();
+      return true;
+    }
+
+    function spendClaim() {
+      reconcileResources();
+      const progression = getProgressionForLevel();
+
+      if (state.claims <= 0) return false;
+
+      const wasFull = state.claims >= progression.claimCap;
+      state.claims -= 1;
+
+      if (wasFull || !state.claimNextAt) {
+        state.claimNextAt = Date.now() + progression.claimRechargeMs;
+      }
+
+      saveState();
+      return true;
+    }
+
+    function addXp(amount) {
+      if (!Number.isFinite(amount) || amount <= 0) return;
+
+      const oldLevel = state.level;
+      state.xp += Math.floor(amount);
+      state.lifetimeXp += Math.floor(amount);
+
+      while (state.xp >= xpNeeded(state.level)) {
+        state.xp -= xpNeeded(state.level);
+        state.level += 1;
+      }
+
+      if (state.level > oldLevel) {
+        const oldProgression = getProgressionForLevel(oldLevel);
+        const newProgression = getProgressionForLevel(state.level);
+
+        if (
+          state.rollNextAt &&
+          newProgression.rollRechargeMs < oldProgression.rollRechargeMs
+        ) {
+          state.rollNextAt = Math.min(
+            state.rollNextAt,
+            Date.now() + newProgression.rollRechargeMs
+          );
+        }
+
+        reconcileResources();
+        showToast(`Level ${state.level}! ${getTrainerTitle(state.level)}.`);
+      }
+
+      saveState();
+    }
+
+    function formatDuration(ms) {
+      if (!Number.isFinite(ms) || ms <= 0) return "agora";
+
+      const totalSeconds = Math.ceil(ms / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      if (hours > 0) {
+        return `${hours}h ${String(minutes).padStart(2, "0")}m`;
+      }
+
+      if (minutes > 0) {
+        return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
+      }
+
+      return `${seconds}s`;
+    }
+
+    function nextRechargeText() {
+      const progression = getProgressionForLevel();
+      const now = Date.now();
+      const parts = [];
+
+      if (state.rolls < progression.rollCap && state.rollNextAt) {
+        parts.push(`roll em ${formatDuration(state.rollNextAt - now)}`);
+      }
+
+      if (state.claims < progression.claimCap && state.claimNextAt) {
+        parts.push(`claim em ${formatDuration(state.claimNextAt - now)}`);
+      }
+
+      return parts.length ? parts.join(" · ") : "Recargas cheias";
     }
 
     /* =========================
-       FRASES E RELÓGIO
+       FRASES / RELÓGIO
        ========================= */
 
     function getPeriod(hour) {
@@ -1050,7 +2015,99 @@
     }
 
     /* =========================
-       POKÉMON / RARIDADE
+       PITY / SELEÇÃO
+       ========================= */
+
+    function softPityChance(counter, soft, hard, startChance, maxChance) {
+      if (counter >= hard - 1) return 1;
+      if (counter < soft - 1) return 0;
+
+      const progress =
+        (counter - (soft - 1)) /
+        Math.max(1, hard - soft);
+
+      return Math.min(
+        maxChance,
+        startChance + progress * (maxChance - startChance)
+      );
+    }
+
+    function shinyChance() {
+      if (state.pity.shiny >= SHINY_PITY_HARD - 1) return 1;
+      if (state.pity.shiny < SHINY_PITY_SOFT - 1) {
+        return BASE_SHINY_CHANCE;
+      }
+
+      const progress =
+        (state.pity.shiny - (SHINY_PITY_SOFT - 1)) /
+        Math.max(1, SHINY_PITY_HARD - SHINY_PITY_SOFT);
+
+      return Math.min(
+        0.18,
+        BASE_SHINY_CHANCE + progress * 0.16
+      );
+    }
+
+    function chooseRollMode() {
+      const legendaryChance = softPityChance(
+        state.pity.legendary,
+        LEGENDARY_PITY_SOFT,
+        LEGENDARY_PITY_HARD,
+        0.05,
+        0.82
+      );
+
+      if (Math.random() < legendaryChance) {
+        return "legendary";
+      }
+
+      const epicChance = softPityChance(
+        state.pity.epic,
+        EPIC_PITY_SOFT,
+        EPIC_PITY_HARD,
+        0.12,
+        0.80
+      );
+
+      if (Math.random() < epicChance) {
+        return "epic";
+      }
+
+      const progression = getProgressionForLevel();
+
+      if (
+        progression.wishlistSlots > 0 &&
+        state.wishlist.length > 0 &&
+        Math.random() < WISHLIST_ROLL_CHANCE
+      ) {
+        return "wishlist";
+      }
+
+      return "normal";
+    }
+
+    function updatePityAfterRoll(roll) {
+      if (["Epic", "Legendary", "Mythical"].includes(roll.rarity)) {
+        state.pity.epic = 0;
+      } else {
+        state.pity.epic += 1;
+      }
+
+      if (["Legendary", "Mythical"].includes(roll.rarity)) {
+        state.pity.legendary = 0;
+      } else {
+        state.pity.legendary += 1;
+      }
+
+      if (roll.isShiny) {
+        state.pity.shiny = 0;
+      } else {
+        state.pity.shiny += 1;
+      }
+    }
+
+    /* =========================
+       POKÉAPI / RARIDADE
        ========================= */
 
     function formatPokemonName(name) {
@@ -1077,28 +2134,13 @@
     }
 
     async function getRandomPokemonId() {
-      const shouldUseFavorite =
-        FAVORITE_POKEMON_IDS.length > 0 &&
-        Math.random() < FAVORITE_CHANCE;
-
-      if (shouldUseFavorite) {
-        return FAVORITE_POKEMON_IDS[
-          Math.floor(Math.random() * FAVORITE_POKEMON_IDS.length)
-        ];
-      }
-
       const speciesCount = await getSpeciesCount();
       return Math.floor(Math.random() * speciesCount) + 1;
     }
 
     function determineRarity(pokemon, species) {
-      if (species?.is_mythical) {
-        return "Mythical";
-      }
-
-      if (species?.is_legendary) {
-        return "Legendary";
-      }
+      if (species?.is_mythical) return "Mythical";
+      if (species?.is_legendary) return "Legendary";
 
       const baseStatTotal = (pokemon.stats || []).reduce(
         (sum, stat) => sum + Number(stat.base_stat || 0),
@@ -1137,73 +2179,133 @@
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    function isWishlistId(id) {
+      return state.wishlist.some(item => Number(item.id) === Number(id));
+    }
+
+    async function fetchCandidate(id, requireMode, isShiny) {
+      const speciesResponse = await fetch(
+        `https://pokeapi.co/api/v2/pokemon-species/${id}`
+      );
+
+      if (!speciesResponse.ok) return null;
+      const species = await speciesResponse.json();
+
+      if (
+        requireMode === "legendary" &&
+        !species.is_legendary &&
+        !species.is_mythical
+      ) {
+        return null;
+      }
+
+      const pokemonResponse = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${id}`
+      );
+
+      if (!pokemonResponse.ok) return null;
+      const pokemon = await pokemonResponse.json();
+      const rarity = determineRarity(pokemon, species);
+
+      if (
+        requireMode === "epic" &&
+        !["Epic", "Legendary", "Mythical"].includes(rarity)
+      ) {
+        return null;
+      }
+
+      const showdown = pokemon.sprites?.other?.showdown;
+      const blackWhiteAnimated =
+        pokemon.sprites?.versions?.["generation-v"]?.["black-white"]
+          ?.animated;
+
+      const normalAnimated =
+        showdown?.front_default ||
+        blackWhiteAnimated?.front_default;
+
+      const shinyAnimated =
+        showdown?.front_shiny ||
+        blackWhiteAnimated?.front_shiny;
+
+      const animatedSprite = isShiny
+        ? shinyAnimated
+        : normalAnimated;
+
+      if (!animatedSprite) return null;
+
+      const staticSprite =
+        (
+          isShiny
+            ? pokemon.sprites?.front_shiny
+            : pokemon.sprites?.front_default
+        ) || animatedSprite;
+
+      await preloadImage(animatedSprite);
+
+      return {
+        uid: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        id: pokemon.id,
+        name: formatPokemonName(pokemon.name),
+        sprite: animatedSprite,
+        staticSprite,
+        isShiny,
+        rarity,
+        wishlistHit: isWishlistId(pokemon.id),
+        claimed: false
+      };
+    }
+
     async function preparePokemon() {
-      for (let attempt = 0; attempt < 16; attempt++) {
-        const pokemonId = await getRandomPokemonId();
-        const isShiny = Math.random() < SHINY_CHANCE;
+      const mode = chooseRollMode();
+      const isShiny = Math.random() < shinyChance();
 
-        try {
-          const [pokemonResponse, speciesResponse] = await Promise.all([
-            fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`),
-            fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`)
-          ]);
+      if (mode === "wishlist" && state.wishlist.length) {
+        const shuffled = [...state.wishlist].sort(() => Math.random() - 0.5);
 
-          if (!pokemonResponse.ok || !speciesResponse.ok) {
-            continue;
-          }
-
-          const [pokemon, species] = await Promise.all([
-            pokemonResponse.json(),
-            speciesResponse.json()
-          ]);
-
-          const showdown = pokemon.sprites?.other?.showdown;
-          const blackWhiteAnimated =
-            pokemon.sprites?.versions?.["generation-v"]?.["black-white"]
-              ?.animated;
-
-          const normalAnimated =
-            showdown?.front_default ||
-            blackWhiteAnimated?.front_default;
-
-          const shinyAnimated =
-            showdown?.front_shiny ||
-            blackWhiteAnimated?.front_shiny;
-
-          const animatedSprite =
-            isShiny ? shinyAnimated : normalAnimated;
-
-          if (!animatedSprite) continue;
-
-          const staticSprite =
-            (
+        for (const wished of shuffled) {
+          try {
+            const candidate = await fetchCandidate(
+              wished.id,
+              "normal",
               isShiny
-                ? pokemon.sprites?.front_shiny
-                : pokemon.sprites?.front_default
-            ) || animatedSprite;
-
-          await preloadImage(animatedSprite);
-
-          return {
-            uid: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-            id: pokemon.id,
-            name: formatPokemonName(pokemon.name),
-            sprite: animatedSprite,
-            staticSprite,
-            isShiny,
-            rarity: determineRarity(pokemon, species),
-            claimed: false
-          };
-        } catch {
-          // Tenta outro Pokémon.
+            );
+            if (candidate) return candidate;
+          } catch {}
         }
+      }
+
+      const maxAttempts =
+        mode === "legendary" ? 80 :
+        mode === "epic" ? 36 :
+        16;
+
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+          const id = await getRandomPokemonId();
+          const candidate = await fetchCandidate(
+            id,
+            mode === "wishlist" ? "normal" : mode,
+            isShiny
+          );
+
+          if (candidate) return candidate;
+        } catch {}
+      }
+
+      // Fallback limpo caso um pity muito específico falhe por rede/API.
+      for (let attempt = 0; attempt < 16; attempt++) {
+        try {
+          const id = await getRandomPokemonId();
+          const candidate = await fetchCandidate(id, "normal", isShiny);
+          if (candidate) return candidate;
+        } catch {}
       }
 
       throw new Error("Não foi possível preparar um Pokémon.");
     }
 
     function queueNextPokemon() {
-      nextPokemonPromise = preparePokemon();
+      nextPokemonPromise = preparePokemon().catch(() => null);
     }
 
     async function getPreparedPokemon(firstLoad = false) {
@@ -1213,7 +2315,9 @@
 
       const prepared = await nextPokemonPromise;
       nextPokemonPromise = null;
-      return prepared;
+
+      if (prepared) return prepared;
+      return preparePokemon();
     }
 
     /* =========================
@@ -1241,9 +2345,7 @@
           await context.resume();
         }
 
-        if (context.state !== "running") {
-          return false;
-        }
+        if (context.state !== "running") return false;
 
         const now = context.currentTime;
         const notes = [
@@ -1258,10 +2360,7 @@
           const gain = context.createGain();
 
           oscillator.type = index % 2 === 0 ? "sine" : "triangle";
-          oscillator.frequency.setValueAtTime(
-            frequency,
-            now + delay
-          );
+          oscillator.frequency.setValueAtTime(frequency, now + delay);
 
           gain.gain.setValueAtTime(0.0001, now + delay);
           gain.gain.exponentialRampToValueAtTime(
@@ -1289,10 +2388,7 @@
 
     async function triggerShinySound() {
       const played = await playShinySound();
-
-      if (!played) {
-        pendingShinySound = true;
-      }
+      if (!played) pendingShinySound = true;
     }
 
     function flushPendingShinySound() {
@@ -1301,7 +2397,7 @@
     }
 
     /* =========================
-       UI DO GACHA
+       GACHA / XP / CLAIM
        ========================= */
 
     function collectionKey(roll) {
@@ -1313,105 +2409,49 @@
       return state.collection.some(item => item.key === key);
     }
 
-    function updateGachaUI() {
-      resetDailyIfNeeded();
-
-      const roll = state.currentRoll;
-
-      gachaStats.textContent =
-        `${state.rollsLeft} rolls · ` +
-        `${state.claimsLeft} claims · ` +
-        `${state.coins} coins`;
-
-      rollButton.disabled =
-        state.rollsLeft <= 0 || pokemonChanging;
-
-      buyRollButton.disabled =
-        state.coins < EXTRA_ROLL_PRICE;
-
-      collectionBuyRoll.disabled =
-        state.coins < EXTRA_ROLL_PRICE;
-
-      if (!roll) {
-        rollName.textContent = "Sem roll";
-        rollRarity.textContent = "Abra uma nova aba amanhã";
-        claimButton.disabled = true;
-        claimButton.textContent = "Claim";
-        return;
-      }
-
-      rollName.textContent = roll.name;
-
-      const shinyPrefix = roll.isShiny ? "✦ SHINY · " : "";
-      rollRarity.textContent =
-        `${shinyPrefix}${raritySymbol(roll.rarity)} ${roll.rarity}`;
-
-      rollRarity.classList.toggle("shiny", roll.isShiny);
-
-      if (roll.claimed) {
-        claimButton.disabled = true;
-        claimButton.textContent = "Claimed";
-      } else if (state.claimsLeft <= 0) {
-        claimButton.disabled = true;
-        claimButton.textContent = "Sem claims";
-      } else {
-        claimButton.disabled = false;
-        claimButton.textContent = "Claim";
-      }
+    function rollXpReward(roll) {
+      let amount = ROLL_XP[roll.rarity] || 5;
+      if (roll.isShiny) amount += 20;
+      if (roll.wishlistHit) amount += 3;
+      return amount;
     }
 
-    function displayRoll(roll, animate = true) {
-      if (!roll) return;
+    function duplicateReward(roll) {
+      const base = DUPLICATE_REWARDS[roll.rarity] || 20;
+      const shinyMultiplier = roll.isShiny ? 3 : 1;
+      const levelMultiplier = getProgressionForLevel().coinMultiplier;
 
-      pokemonSpriteWrap.classList.remove("shiny");
-
-      pokemonSprite.src = roll.sprite;
-      pokemonSprite.alt = roll.name;
-      pokemonSprite.removeAttribute("title");
-
-      if (roll.isShiny) {
-        void pokemonSpriteWrap.offsetWidth;
-        pokemonSpriteWrap.classList.add("shiny");
-        triggerShinySound();
-      }
-
-      if (animate) {
-        pokemonSprite.classList.add("switching");
-        void pokemonSprite.offsetWidth;
-
-        requestAnimationFrame(() => {
-          pokemonSprite.classList.remove("switching");
-        });
-      }
-
-      updateGachaUI();
+      return Math.round(base * shinyMultiplier * levelMultiplier);
     }
 
-    async function performRoll({
-      consume = true,
-      firstLoad = false,
-      forcePrepared = false
-    } = {}) {
+    function updateRollStats(roll) {
+      if (roll.isShiny) state.stats.shinyRolls += 1;
+      if (roll.rarity === "Legendary") state.stats.legendaryRolls += 1;
+      if (roll.rarity === "Mythical") state.stats.mythicalRolls += 1;
+    }
+
+    async function performRoll({ consume = true, firstLoad = false } = {}) {
       if (pokemonChanging) return false;
 
-      resetDailyIfNeeded();
+      reconcileResources();
 
-      if (consume && state.rollsLeft <= 0) {
-        showToast("Sem rolls por hoje.");
-        updateGachaUI();
+      if (consume && state.rolls <= 0) {
+        showToast(
+          state.rollNextAt
+            ? `Próximo roll em ${formatDuration(state.rollNextAt - Date.now())}.`
+            : "Sem rolls disponíveis."
+        );
+        updateAllUI();
         return false;
       }
 
       pokemonChanging = true;
-
-      let consumedRoll = false;
+      let spent = false;
 
       try {
         if (consume) {
-          state.rollsLeft -= 1;
-          state.totalRolls += 1;
-          consumedRoll = true;
-          saveState();
+          spent = spendRoll();
+          if (!spent) return false;
         }
 
         if (!firstLoad && pokemonSprite.getAttribute("src")) {
@@ -1421,14 +2461,15 @@
           pokemonSprite.classList.add("loading");
         }
 
-        const prepared = await getPreparedPokemon(
-          firstLoad && !forcePrepared
-        );
+        const prepared = await getPreparedPokemon(firstLoad);
 
+        state.totalRolls += 1;
         prepared.rollNumber = state.totalRolls;
-
         state.currentRoll = prepared;
-        saveState();
+
+        updatePityAfterRoll(prepared);
+        updateRollStats(prepared);
+        addXp(rollXpReward(prepared));
 
         pokemonSpriteWrap.classList.remove("shiny");
         pokemonSprite.src = prepared.sprite;
@@ -1448,27 +2489,27 @@
           });
         }
 
+        saveState();
         queueNextPokemon();
-        updateGachaUI();
-        renderCollection();
+        updateAllUI();
 
         return true;
       } catch {
         pokemonSprite.classList.remove("switching");
 
-        if (consumedRoll) {
-          state.rollsLeft += 1;
-          state.totalRolls = Math.max(0, state.totalRolls - 1);
+        if (spent) {
+          const progression = getProgressionForLevel();
+          state.rolls = Math.min(progression.rollCap, state.rolls + 1);
+          if (state.rolls >= progression.rollCap) {
+            state.rollNextAt = null;
+          }
           saveState();
         }
 
         showToast("Não consegui carregar o roll. Tenta de novo.");
 
-        if (!nextPokemonPromise) {
-          queueNextPokemon();
-        }
-
-        updateGachaUI();
+        if (!nextPokemonPromise) queueNextPokemon();
+        updateAllUI();
         return false;
       } finally {
         pokemonSprite.classList.remove("loading");
@@ -1476,35 +2517,38 @@
       }
     }
 
-    function duplicateReward(roll) {
-      const base = DUPLICATE_REWARDS[roll.rarity] || 20;
-      return roll.isShiny ? base * 3 : base;
-    }
-
     function claimCurrentPokemon() {
-      resetDailyIfNeeded();
+      reconcileResources();
 
       const roll = state.currentRoll;
 
-      if (!roll || roll.claimed) {
+      if (!roll || roll.claimed) return;
+
+      if (state.claims <= 0) {
+        showToast(
+          state.claimNextAt
+            ? `Próximo claim em ${formatDuration(state.claimNextAt - Date.now())}.`
+            : "Sem claims disponíveis."
+        );
         return;
       }
 
-      if (state.claimsLeft <= 0) {
-        showToast("Você não tem mais claims hoje.");
-        return;
-      }
+      if (!spendClaim()) return;
 
-      state.claimsLeft -= 1;
+      const alreadyOwned = isOwned(roll);
+
+      state.totalClaims += 1;
       roll.claimed = true;
 
-      if (isOwned(roll)) {
+      let xpReward = 10;
+
+      if (alreadyOwned) {
         const reward = duplicateReward(roll);
         state.coins += reward;
+        state.totalCoinsEarned += reward;
+        xpReward += 3;
 
-        showToast(
-          `Duplicata de ${roll.name}: +${reward} coins.`
-        );
+        showToast(`Duplicata de ${roll.name}: +${reward} coins.`);
       } else {
         state.collection.unshift({
           key: collectionKey(roll),
@@ -1517,6 +2561,10 @@
           rollNumber: roll.rollNumber || state.totalRolls
         });
 
+        xpReward += 8;
+        if (roll.isShiny) xpReward += 5;
+        if (["Legendary", "Mythical"].includes(roll.rarity)) xpReward += 6;
+
         showToast(
           roll.isShiny
             ? `✦ ${roll.name} shiny entrou na coleção.`
@@ -1525,14 +2573,19 @@
       }
 
       state.currentRoll = roll;
+      addXp(xpReward);
       saveState();
-
-      updateGachaUI();
-      renderCollection();
+      updateAllUI();
     }
 
     function buyExtraRoll() {
-      resetDailyIfNeeded();
+      reconcileResources();
+      const progression = getProgressionForLevel();
+
+      if (state.rolls >= progression.rollCap) {
+        showToast("Seu estoque de rolls já está cheio.");
+        return;
+      }
 
       if (state.coins < EXTRA_ROLL_PRICE) {
         showToast(`Você precisa de ${EXTRA_ROLL_PRICE} coins.`);
@@ -1540,11 +2593,14 @@
       }
 
       state.coins -= EXTRA_ROLL_PRICE;
-      state.rollsLeft += 1;
-      saveState();
+      state.rolls += 1;
 
-      updateGachaUI();
-      renderCollection();
+      if (state.rolls >= progression.rollCap) {
+        state.rollNextAt = null;
+      }
+
+      saveState();
+      updateAllUI();
       showToast("+1 roll comprado.");
     }
 
@@ -1557,15 +2613,43 @@
       hero.classList.toggle("details-open", open);
     }
 
-    function showToast(text) {
-      toast.textContent = text;
-      toast.classList.add("show");
+    /* =========================
+       MAIN MENU
+       ========================= */
 
-      clearTimeout(toastTimer);
+    function renderMenu() {
+      reconcileResources();
 
-      toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2400);
+      const progression = getProgressionForLevel();
+
+      menuSubtitle.textContent =
+        `Lv. ${state.level} · ${getTrainerTitle(state.level)}`;
+
+      menuResources.textContent =
+        `${state.rolls}/${progression.rollCap} rolls · ` +
+        `${state.claims}/${progression.claimCap} claims · ` +
+        `${state.coins} coins`;
+
+      menuWishlistDescription.textContent =
+        progression.wishlistSlots > 0
+          ? `${state.wishlist.length}/${progression.wishlistSlots} slots · ` +
+            `${Math.round(WISHLIST_ROLL_CHANCE * 100)}% chance por roll`
+          : "Desbloqueia no Level 10";
+    }
+
+    function openMenu() {
+      closeCollection();
+      closeProfile();
+      closeWishlist();
+      renderMenu();
+
+      menuLayer.classList.add("open");
+      menuLayer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeMenu() {
+      menuLayer.classList.remove("open");
+      menuLayer.setAttribute("aria-hidden", "true");
     }
 
     /* =========================
@@ -1573,6 +2657,9 @@
        ========================= */
 
     function openCollection() {
+      closeMenu();
+      closeProfile();
+      closeWishlist();
       renderCollection();
 
       collectionLayer.classList.add("open");
@@ -1585,8 +2672,6 @@
     }
 
     function renderCollection() {
-      resetDailyIfNeeded();
-
       const uniqueSpecies = new Set(
         state.collection.map(item => item.id)
       ).size;
@@ -1598,12 +2683,11 @@
       collectionStats.textContent =
         `${uniqueSpecies} Pokémon · ` +
         `${shinyCount} shiny · ` +
-        `${state.coins} coins · ` +
-        `${state.rollsLeft} rolls · ` +
-        `${state.claimsLeft} claims`;
+        `${state.coins} coins`;
 
       collectionBuyRoll.disabled =
-        state.coins < EXTRA_ROLL_PRICE;
+        state.coins < EXTRA_ROLL_PRICE ||
+        state.rolls >= getProgressionForLevel().rollCap;
 
       collectionGrid.replaceChildren();
 
@@ -1645,13 +2729,373 @@
     }
 
     /* =========================
+       WISHLIST
+       ========================= */
+
+    function openWishlist() {
+      closeMenu();
+      closeProfile();
+      closeCollection();
+      renderWishlist();
+
+      wishlistLayer.classList.add("open");
+      wishlistLayer.setAttribute("aria-hidden", "false");
+
+      if (getProgressionForLevel().wishlistSlots > 0) {
+        setTimeout(() => wishlistInput.focus(), 30);
+      }
+    }
+
+    function closeWishlist() {
+      wishlistLayer.classList.remove("open");
+      wishlistLayer.setAttribute("aria-hidden", "true");
+      wishlistInput.blur();
+    }
+
+    function normalizePokemonQuery(value) {
+      return value
+        .trim()
+        .toLowerCase()
+        .replace(/[.'’]/g, "")
+        .replace(/\s+/g, "-");
+    }
+
+    async function addWishlistPokemon() {
+      const progression = getProgressionForLevel();
+
+      if (progression.wishlistSlots <= 0) {
+        showToast("Wishlist desbloqueia no Level 10.");
+        return;
+      }
+
+      if (state.wishlist.length >= progression.wishlistSlots) {
+        showToast("Sua wishlist está cheia.");
+        return;
+      }
+
+      const query = normalizePokemonQuery(wishlistInput.value);
+      if (!query) return;
+
+      wishlistAdd.disabled = true;
+
+      try {
+        const response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon/${encodeURIComponent(query)}`
+        );
+
+        if (!response.ok) {
+          throw new Error("not found");
+        }
+
+        const pokemon = await response.json();
+
+        if (state.wishlist.some(item => item.id === pokemon.id)) {
+          showToast("Esse Pokémon já está na wishlist.");
+          return;
+        }
+
+        state.wishlist.push({
+          id: pokemon.id,
+          name: formatPokemonName(pokemon.name),
+          sprite:
+            pokemon.sprites?.front_default ||
+            pokemon.sprites?.other?.["official-artwork"]?.front_default ||
+            ""
+        });
+
+        wishlistInput.value = "";
+        saveState();
+        renderWishlist();
+        renderProfile();
+        showToast(`${formatPokemonName(pokemon.name)} entrou na wishlist.`);
+      } catch {
+        showToast("Não encontrei esse Pokémon.");
+      } finally {
+        wishlistAdd.disabled = false;
+      }
+    }
+
+    function removeWishlistPokemon(id) {
+      state.wishlist = state.wishlist.filter(
+        item => Number(item.id) !== Number(id)
+      );
+      saveState();
+      renderWishlist();
+      renderProfile();
+    }
+
+    function renderWishlist() {
+      const progression = getProgressionForLevel();
+      const unlocked = progression.wishlistSlots > 0;
+
+      wishlistSubtitle.textContent = unlocked
+        ? `${state.wishlist.length} / ${progression.wishlistSlots} slots · ${Math.round(WISHLIST_ROLL_CHANCE * 100)}% chance por roll`
+        : "Unlocks at Level 10";
+
+      wishlistForm.style.display = unlocked ? "flex" : "none";
+      wishlistHelp.style.display = unlocked ? "block" : "none";
+      wishlistGrid.replaceChildren();
+
+      if (!unlocked) {
+        const locked = document.createElement("div");
+        locked.className = "wishlist-locked";
+        locked.textContent =
+          "Chegue ao Level 10 para desbloquear 3 slots de wishlist. Pokémon desejados ganham uma chance extra de aparecer nos rolls.";
+        wishlistGrid.appendChild(locked);
+        return;
+      }
+
+      wishlistAdd.disabled =
+        state.wishlist.length >= progression.wishlistSlots;
+
+      if (!state.wishlist.length) {
+        const empty = document.createElement("div");
+        empty.className = "wishlist-empty";
+        empty.textContent =
+          "Adicione um Pokémon pelo nome ou número da Pokédex.";
+        wishlistGrid.appendChild(empty);
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+
+      state.wishlist.forEach(item => {
+        const row = document.createElement("article");
+        row.className = "wishlist-item";
+
+        const image = document.createElement("img");
+        image.src = item.sprite;
+        image.alt = item.name;
+
+        const info = document.createElement("div");
+        info.className = "wishlist-item-info";
+
+        const name = document.createElement("div");
+        name.className = "wishlist-item-name";
+        name.textContent = item.name;
+
+        const number = document.createElement("div");
+        number.className = "wishlist-item-number";
+        number.textContent = `#${String(item.id).padStart(4, "0")}`;
+
+        const remove = document.createElement("button");
+        remove.className = "wishlist-remove";
+        remove.type = "button";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", `Remover ${item.name}`);
+        remove.addEventListener("click", () => {
+          removeWishlistPokemon(item.id);
+        });
+
+        info.append(name, number);
+        row.append(image, info, remove);
+        fragment.appendChild(row);
+      });
+
+      wishlistGrid.appendChild(fragment);
+    }
+
+    /* =========================
+       PROFILE
+       ========================= */
+
+    function openProfile() {
+      closeMenu();
+      closeCollection();
+      closeWishlist();
+      renderProfile();
+
+      profileLayer.classList.add("open");
+      profileLayer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeProfile() {
+      profileLayer.classList.remove("open");
+      profileLayer.setAttribute("aria-hidden", "true");
+    }
+
+    function renderProgression() {
+      profileProgression.replaceChildren();
+
+      const upcoming = PROGRESSION.filter(
+        item => item.level > state.level
+      ).slice(0, 4);
+
+      if (!upcoming.length) {
+        const row = document.createElement("div");
+        row.className = "progression-row";
+        row.innerHTML = "<span>Max progression</span><span>Você desbloqueou tudo da V2.</span>";
+        profileProgression.appendChild(row);
+        return;
+      }
+
+      upcoming.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "progression-row";
+
+        const level = document.createElement("span");
+        level.textContent = `Level ${item.level}`;
+
+        const reward = document.createElement("span");
+        reward.textContent = item.text;
+
+        row.append(level, reward);
+        profileProgression.appendChild(row);
+      });
+    }
+
+    function renderProfile() {
+      reconcileResources();
+      const progression = getProgressionForLevel();
+      const needed = xpNeeded(state.level);
+      const xpPercent = Math.min(100, (state.xp / needed) * 100);
+
+      const uniqueSpecies = new Set(
+        state.collection.map(item => item.id)
+      ).size;
+      const shinies = state.collection.filter(item => item.isShiny).length;
+      const legendary = state.collection.filter(
+        item => item.rarity === "Legendary"
+      ).length;
+      const mythical = state.collection.filter(
+        item => item.rarity === "Mythical"
+      ).length;
+
+      profileLevel.textContent = `Level ${state.level}`;
+      profileTitle.textContent = getTrainerTitle();
+      profileXpText.textContent = `${state.xp} / ${needed} XP`;
+      profileXpFill.style.width = `${xpPercent}%`;
+
+      profileRolls.textContent = `${state.rolls} / ${progression.rollCap}`;
+      profileNextRoll.textContent =
+        state.rolls >= progression.rollCap || !state.rollNextAt
+          ? "Full"
+          : formatDuration(state.rollNextAt - Date.now());
+
+      profileClaims.textContent = `${state.claims} / ${progression.claimCap}`;
+      profileNextClaim.textContent =
+        state.claims >= progression.claimCap || !state.claimNextAt
+          ? "Full"
+          : formatDuration(state.claimNextAt - Date.now());
+
+      profileCoins.textContent = state.coins;
+      profileWishlistSlots.textContent = progression.wishlistSlots > 0
+        ? `${state.wishlist.length} / ${progression.wishlistSlots}`
+        : "Locked";
+
+      profileTotalRolls.textContent = state.totalRolls;
+      profileTotalClaims.textContent = state.totalClaims;
+      profileCollectionCount.textContent = uniqueSpecies;
+      profileShinies.textContent = shinies;
+      profileLegendary.textContent = legendary;
+      profileMythical.textContent = mythical;
+
+      profilePityEpic.textContent =
+        `${state.pity.epic} / ${EPIC_PITY_HARD}`;
+      profilePityLegendary.textContent =
+        `${state.pity.legendary} / ${LEGENDARY_PITY_HARD}`;
+      profilePityShiny.textContent =
+        `${state.pity.shiny} / ${SHINY_PITY_HARD}`;
+
+      renderProgression();
+    }
+
+    /* =========================
+       UI GERAL
+       ========================= */
+
+    function updateGachaUI() {
+      reconcileResources();
+      const progression = getProgressionForLevel();
+      const roll = state.currentRoll;
+      const needed = xpNeeded(state.level);
+
+      gachaStats.textContent =
+        `${state.rolls}/${progression.rollCap} rolls · ` +
+        `${state.claims}/${progression.claimCap} claims · ` +
+        `${state.coins} coins`;
+
+      rechargeStatus.textContent = nextRechargeText();
+      levelStatus.textContent =
+        `Lv. ${state.level} · ${state.xp} / ${needed} XP`;
+
+      rollButton.disabled = state.rolls <= 0 || pokemonChanging;
+      buyRollButton.disabled =
+        state.coins < EXTRA_ROLL_PRICE ||
+        state.rolls >= progression.rollCap;
+
+      collectionBuyRoll.disabled = buyRollButton.disabled;
+
+      if (!roll) {
+        rollName.textContent = "Sem roll";
+        rollRarity.textContent = "Aguardando recarga";
+        rollRarity.classList.remove("shiny", "wishlist-hit");
+        claimButton.disabled = true;
+        claimButton.textContent = "Claim";
+        return;
+      }
+
+      rollName.textContent = roll.name;
+
+      const shinyPrefix = roll.isShiny ? "✦ SHINY · " : "";
+      const wishPrefix = roll.wishlistHit ? "♡ WISHLIST · " : "";
+
+      rollRarity.textContent =
+        `${wishPrefix}${shinyPrefix}${raritySymbol(roll.rarity)} ${roll.rarity}`;
+
+      rollRarity.classList.toggle("shiny", roll.isShiny);
+      rollRarity.classList.toggle("wishlist-hit", roll.wishlistHit);
+
+      if (roll.claimed) {
+        claimButton.disabled = true;
+        claimButton.textContent = "Claimed";
+      } else if (state.claims <= 0) {
+        claimButton.disabled = true;
+        claimButton.textContent = "Sem claims";
+      } else {
+        claimButton.disabled = false;
+        claimButton.textContent = "Claim";
+      }
+    }
+
+    function displaySavedRoll(roll) {
+      if (!roll) return;
+
+      pokemonSpriteWrap.classList.remove("shiny");
+      pokemonSprite.src = roll.sprite;
+      pokemonSprite.alt = roll.name;
+      pokemonSprite.removeAttribute("title");
+
+      if (roll.isShiny) {
+        void pokemonSpriteWrap.offsetWidth;
+        pokemonSpriteWrap.classList.add("shiny");
+      }
+    }
+
+    function updateAllUI() {
+      updateGachaUI();
+      renderCollection();
+      renderWishlist();
+      renderProfile();
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    }
+
+    /* =========================
        SEARCH
        ========================= */
 
     function openSearch(initialValue = "") {
       searchLayer.classList.add("open");
       searchLayer.setAttribute("aria-hidden", "false");
-
       searchInput.value = initialValue;
 
       const focusSearch = () => {
@@ -1696,6 +3140,10 @@
         `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     }
 
+    function isTypingField() {
+      return [searchInput, wishlistInput].includes(document.activeElement);
+    }
+
     /* =========================
        EVENTOS
        ========================= */
@@ -1713,17 +3161,43 @@
     });
 
     searchLayer.addEventListener("mousedown", event => {
-      if (event.target === searchLayer) {
-        closeSearch();
-      }
+      if (event.target === searchLayer) closeSearch();
+    });
+
+    menuClose.addEventListener("click", closeMenu);
+    menuProfile.addEventListener("click", openProfile);
+    menuCollection.addEventListener("click", openCollection);
+    menuWishlist.addEventListener("click", openWishlist);
+    menuLayer.addEventListener("mousedown", event => {
+      if (event.target === menuLayer) closeMenu();
     });
 
     collectionClose.addEventListener("click", closeCollection);
     collectionBuyRoll.addEventListener("click", buyExtraRoll);
-
     collectionLayer.addEventListener("mousedown", event => {
-      if (event.target === collectionLayer) {
-        closeCollection();
+      if (event.target === collectionLayer) closeCollection();
+    });
+
+    profileClose.addEventListener("click", closeProfile);
+    profileCollection.addEventListener("click", openCollection);
+    profileWishlist.addEventListener("click", openWishlist);
+    profileLayer.addEventListener("mousedown", event => {
+      if (event.target === profileLayer) closeProfile();
+    });
+
+    wishlistClose.addEventListener("click", closeWishlist);
+    wishlistAdd.addEventListener("click", addWishlistPokemon);
+    wishlistLayer.addEventListener("mousedown", event => {
+      if (event.target === wishlistLayer) closeWishlist();
+    });
+    wishlistInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addWishlistPokemon();
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeWishlist();
       }
     });
 
@@ -1759,15 +3233,31 @@
       flushPendingShinySound();
 
       if (event.key === "Escape") {
+        if (menuLayer.classList.contains("open")) {
+          event.preventDefault();
+          closeMenu();
+          return;
+        }
+
+        if (wishlistLayer.classList.contains("open")) {
+          event.preventDefault();
+          closeWishlist();
+          return;
+        }
+
+        if (profileLayer.classList.contains("open")) {
+          event.preventDefault();
+          closeProfile();
+          return;
+        }
+
         if (collectionLayer.classList.contains("open")) {
           event.preventDefault();
           closeCollection();
           return;
         }
 
-        if (searchLayer.classList.contains("open")) {
-          return;
-        }
+        if (searchLayer.classList.contains("open")) return;
 
         if (hero.classList.contains("details-open")) {
           event.preventDefault();
@@ -1785,35 +3275,53 @@
         return;
       }
 
-      if (
+      if (isTypingField()) return;
+
+      const modalOpen =
+        menuLayer.classList.contains("open") ||
         collectionLayer.classList.contains("open") ||
-        document.activeElement === searchInput
-      ) {
+        profileLayer.classList.contains("open") ||
+        wishlistLayer.classList.contains("open");
+
+      if (event.shiftKey && event.key.toLowerCase() === "m") {
+        event.preventDefault();
+
+        if (menuLayer.classList.contains("open")) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+
         return;
       }
 
-      // Shift + C = coleção.
-      if (
-        event.shiftKey &&
-        event.key.toLowerCase() === "c"
-      ) {
+      if (modalOpen) return;
+
+      if (event.shiftKey && event.key.toLowerCase() === "p") {
+        event.preventDefault();
+        openProfile();
+        return;
+      }
+
+      if (event.shiftKey && event.key.toLowerCase() === "w") {
+        event.preventDefault();
+        openWishlist();
+        return;
+      }
+
+      if (event.shiftKey && event.key.toLowerCase() === "c") {
         event.preventDefault();
         openCollection();
         return;
       }
 
-      // Shift + R = novo roll, consumindo um roll diário.
-      if (
-        event.shiftKey &&
-        event.key.toLowerCase() === "r"
-      ) {
+      if (event.shiftKey && event.key.toLowerCase() === "r") {
         event.preventDefault();
         updatePhrase(true);
         performRoll({ consume: true });
         return;
       }
 
-      // Atalhos externos continuam exigindo Shift.
       if (event.shiftKey) {
         const shortcut = KEYBOARD_SHORTCUTS[event.key.toLowerCase()];
 
@@ -1824,15 +3332,13 @@
         }
       }
 
-      // Space ou / abre a pesquisa vazia.
       if (event.key === "/" || event.key === " ") {
         event.preventDefault();
         openSearch();
         return;
       }
 
-      // Qualquer caractere digitável inicia a busca.
-      if (event.key.length === 1) {
+      if (event.key.length === 1 && !event.shiftKey) {
         event.preventDefault();
         openSearch(event.key);
       }
@@ -1843,6 +3349,17 @@
       flushPendingShinySound,
       { passive: true }
     );
+
+    window.addEventListener("storage", event => {
+      if (event.key !== STORAGE_KEY || !event.newValue) return;
+
+      try {
+        state = normalizeState(JSON.parse(event.newValue));
+        reconcileResources();
+        displaySavedRoll(state.currentRoll);
+        updateAllUI();
+      } catch {}
+    });
 
     /* =========================
        ADAPTIVE TAB BAR COLOUR
@@ -1972,28 +3489,31 @@
     }
 
     /* =========================
-       BOOT
+       BOOT / TIMERS
        ========================= */
 
     async function bootGacha() {
-      resetDailyIfNeeded();
-      updateGachaUI();
-      renderCollection();
+      reconcileResources();
+      displaySavedRoll(state.currentRoll);
+      updateAllUI();
 
-      /*
-        Abrir uma nova aba = 1 roll gratuito do estoque diário.
-        Quando os rolls acabam, mostramos o último roll salvo.
-      */
-      if (state.rollsLeft > 0) {
+      // Nova aba = um roll, se houver energia disponível.
+      if (state.rolls > 0) {
         await performRoll({
           consume: true,
           firstLoad: true
         });
-      } else if (state.currentRoll) {
-        displayRoll(state.currentRoll, false);
-        queueNextPokemon();
       } else {
-        showToast("Seus rolls voltam amanhã.");
+        if (!state.currentRoll) {
+          showToast(
+            state.rollNextAt
+              ? `Próximo roll em ${formatDuration(state.rollNextAt - Date.now())}.`
+              : "Sem rolls disponíveis."
+          );
+        }
+
+        // Mesmo sem energia, deixamos o próximo roll preparado.
+        queueNextPokemon();
       }
     }
 
@@ -2002,16 +3522,27 @@
     syncThemeColorToWallpaper();
     bootGacha();
 
-    /*
-      Atualiza no início de cada novo minuto.
-      Também ativa os easter eggs exatamente no horário certo.
-    */
-    const delay = (60 - new Date().getSeconds()) * 1000;
+    const minuteDelay = (60 - new Date().getSeconds()) * 1000;
 
     setTimeout(() => {
       updateClock();
       setInterval(updateClock, 60_000);
-    }, delay);
+    }, minuteDelay);
+
+    // Atualiza contadores de recarga e perfil em tempo real.
+    setInterval(() => {
+      const changed = reconcileResources();
+      updateGachaUI();
+
+      if (profileLayer.classList.contains("open")) {
+        renderProfile();
+      }
+
+      if (changed) {
+        renderCollection();
+        renderWishlist();
+      }
+    }, 1000);
 
     window.addEventListener("resize", syncThemeColorToWallpaper);
   </script>
