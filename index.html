@@ -363,6 +363,290 @@
       }
     }
 
+
+    /* =========================
+       GACHA V1
+       ========================= */
+
+    .hero.details-open:hover .pokemon-panel {
+      max-height: 410px;
+    }
+
+    .roll-card {
+      width: min(320px, 82vw);
+      max-height: 0;
+      margin-top: 0;
+      opacity: 0;
+      overflow: hidden;
+      transform: translateY(-8px);
+
+      transition:
+        max-height 340ms cubic-bezier(.22, 1, .36, 1),
+        margin-top 340ms cubic-bezier(.22, 1, .36, 1),
+        opacity 180ms ease,
+        transform 340ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .hero.details-open .roll-card {
+      max-height: 155px;
+      margin-top: 14px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .roll-card-inner {
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.10);
+      text-align: center;
+    }
+
+    #roll-name {
+      font-size: 0.90rem;
+      font-weight: 650;
+      letter-spacing: -0.015em;
+    }
+
+    #roll-rarity {
+      margin-top: 3px;
+      font-size: 0.76rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.62;
+    }
+
+    #roll-rarity.shiny {
+      opacity: 0.92;
+    }
+
+    #gacha-stats {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      font-weight: 550;
+      opacity: 0.48;
+    }
+
+    .roll-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .gacha-button {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      padding: 7px 12px;
+
+      background: rgba(255, 255, 255, 0.055);
+      color: rgba(255, 255, 255, 0.82);
+
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 650;
+
+      cursor: pointer;
+      transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        opacity 150ms ease,
+        transform 150ms ease;
+    }
+
+    .gacha-button:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(255, 255, 255, 0.20);
+      transform: translateY(-1px);
+    }
+
+    .gacha-button:disabled {
+      opacity: 0.30;
+      cursor: default;
+    }
+
+    .gacha-button.primary {
+      background: rgba(255, 255, 255, 0.92);
+      color: #151515;
+      border-color: transparent;
+    }
+
+    .gacha-button.primary:hover:not(:disabled) {
+      background: #fff;
+    }
+
+    /* Collection */
+    .collection-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+
+      background: rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(10px);
+
+      transition:
+        opacity 180ms ease,
+        visibility 180ms ease;
+    }
+
+    .collection-layer.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .collection-window {
+      width: min(760px, 92vw);
+      max-height: min(680px, 82vh);
+      display: flex;
+      flex-direction: column;
+
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 22px;
+      overflow: hidden;
+
+      background: rgba(14, 14, 14, 0.90);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+
+      transform: translateY(8px) scale(0.985);
+      transition: transform 220ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .collection-layer.open .collection-window {
+      transform: translateY(0) scale(1);
+    }
+
+    .collection-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .collection-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    #collection-stats {
+      margin-top: 5px;
+      font-size: 0.73rem;
+      opacity: 0.48;
+    }
+
+    .collection-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 9px;
+
+      padding: 16px 18px 20px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .collection-empty {
+      grid-column: 1 / -1;
+      padding: 54px 20px;
+      text-align: center;
+      font-size: 0.84rem;
+      opacity: 0.42;
+    }
+
+    .collection-item {
+      min-width: 0;
+      padding: 11px 8px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: 15px;
+
+      background: rgba(255, 255, 255, 0.025);
+      text-align: center;
+    }
+
+    .collection-item.shiny {
+      border-color: rgba(255, 238, 164, 0.20);
+      background: rgba(255, 238, 164, 0.035);
+    }
+
+    .collection-item img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    .collection-item-name {
+      margin-top: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      font-size: 0.72rem;
+      font-weight: 650;
+    }
+
+    .collection-item-rarity {
+      margin-top: 3px;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.035em;
+      opacity: 0.42;
+    }
+
+    /* Feedback curto, sem poluir a interface */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 50;
+
+      max-width: min(420px, 86vw);
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 999px;
+
+      background: rgba(14, 14, 14, 0.82);
+      color: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(10px);
+
+      font-size: 0.74rem;
+      font-weight: 600;
+      text-align: center;
+
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 7px);
+
+      transition:
+        opacity 170ms ease,
+        transform 220ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
     @media (max-width: 700px) {
       main {
         padding: 20px;
@@ -382,6 +666,25 @@
         max-height: 220px;
         margin-top: 14px;
       }
+
+      .hero.details-open:hover .pokemon-panel {
+        max-height: 385px;
+      }
+
+      .collection-layer {
+        padding: 16px;
+      }
+
+      .collection-window {
+        width: 94vw;
+        max-height: 84vh;
+      }
+
+      .collection-grid {
+        grid-template-columns: repeat(auto-fill, minmax(102px, 1fr));
+        padding: 13px;
+      }
+
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -427,7 +730,28 @@
           </div>
           <img id="pokemon-sprite" alt="" />
         </div>
+
         <div id="message"></div>
+
+        <div class="roll-card" id="roll-card">
+          <div class="roll-card-inner">
+            <div id="roll-name">Pokémon</div>
+            <div id="roll-rarity">Common</div>
+            <div id="gacha-stats">10 rolls · 2 claims · 0 coins</div>
+
+            <div class="roll-actions">
+              <button class="gacha-button primary" id="claim-button" type="button">
+                Claim
+              </button>
+              <button class="gacha-button" id="roll-button" type="button">
+                Roll
+              </button>
+              <button class="gacha-button" id="buy-roll-button" type="button">
+                +1 roll · 100
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -445,31 +769,81 @@
     </div>
   </div>
 
+  <div class="collection-layer" id="collection-layer" aria-hidden="true">
+    <section class="collection-window" aria-label="Coleção de Pokémon">
+      <header class="collection-header">
+        <div>
+          <div class="collection-title">Collection</div>
+          <div id="collection-stats">0 Pokémon · 0 shiny · 0 coins</div>
+        </div>
+
+        <div class="collection-header-actions">
+          <button class="gacha-button" id="collection-buy-roll" type="button">
+            +1 roll · 100
+          </button>
+          <button class="gacha-button" id="collection-close" type="button">
+            Fechar
+          </button>
+        </div>
+      </header>
+
+      <div class="collection-grid" id="collection-grid"></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
     const clock = document.getElementById("clock");
+    const hero = document.querySelector(".hero");
     const pokemonSprite = document.getElementById("pokemon-sprite");
     const pokemonSpriteWrap = document.getElementById("pokemon-sprite-wrap");
     const pokemonPanel = document.getElementById("pokemon-panel");
     const message = document.getElementById("message");
     const themeColor = document.getElementById("theme-color");
 
+    const rollName = document.getElementById("roll-name");
+    const rollRarity = document.getElementById("roll-rarity");
+    const gachaStats = document.getElementById("gacha-stats");
+    const claimButton = document.getElementById("claim-button");
+    const rollButton = document.getElementById("roll-button");
+    const buyRollButton = document.getElementById("buy-roll-button");
+
     const searchLayer = document.getElementById("search-layer");
     const searchInput = document.getElementById("search-input");
 
-    /*
-      FAVORITOS:
-      Coloque aqui os números da Pokédex dos seus favoritos.
-      Quando a lista tiver algum Pokémon, existe 5% de chance
-      de um sorteio usar um deles.
-    */
+    const collectionLayer = document.getElementById("collection-layer");
+    const collectionGrid = document.getElementById("collection-grid");
+    const collectionStats = document.getElementById("collection-stats");
+    const collectionClose = document.getElementById("collection-close");
+    const collectionBuyRoll = document.getElementById("collection-buy-roll");
+
+    const toast = document.getElementById("toast");
+
+    /* =========================
+       CONFIGURAÇÃO DO GACHA
+       ========================= */
+
+    const STORAGE_KEY = "newtab-pokemon-gacha-v1";
+
+    const DAILY_ROLLS = 10;
+    const DAILY_CLAIMS = 2;
+    const EXTRA_ROLL_PRICE = 100;
+
     const FAVORITE_POKEMON_IDS = [];
     const FAVORITE_CHANCE = 0.05;
 
-    /*
-      Chance de shiny por sorteio.
-      0.02 = 2%.
-    */
+    // 2% por roll.
     const SHINY_CHANCE = 0.02;
+
+    const DUPLICATE_REWARDS = {
+      Common: 20,
+      Uncommon: 35,
+      Rare: 60,
+      Epic: 90,
+      Legendary: 140,
+      Mythical: 180
+    };
 
     const KEYBOARD_SHORTCUTS = {
       y: "https://youtube.com",
@@ -524,10 +898,6 @@
       ]
     };
 
-    /*
-      Easter eggs exatos de horário.
-      Eles substituem temporariamente a frase normal.
-    */
     const TIME_EASTER_EGGS = {
       "00:00": "Um novo dia começou.",
       "03:33": "Um Gastly passou por aqui.",
@@ -540,6 +910,10 @@
       "23:59": "Último minuto do dia."
     };
 
+    /* =========================
+       ESTADO
+       ========================= */
+
     let currentPhrase = "";
     let currentPhrasePeriod = "";
     let currentEasterEgg = null;
@@ -548,6 +922,71 @@
     let pokemonChanging = false;
     let pendingShinySound = false;
     let audioContext = null;
+    let toastTimer = null;
+
+    let speciesCountPromise = null;
+
+    const defaultState = () => ({
+      version: 1,
+      lastReset: "",
+      rollsLeft: DAILY_ROLLS,
+      claimsLeft: DAILY_CLAIMS,
+      coins: 0,
+      totalRolls: 0,
+      collection: [],
+      currentRoll: null
+    });
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+
+        const parsed = JSON.parse(raw);
+
+        return {
+          ...defaultState(),
+          ...parsed,
+          collection: Array.isArray(parsed.collection)
+            ? parsed.collection
+            : []
+        };
+      } catch {
+        return defaultState();
+      }
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch {}
+    }
+
+    function getLocalDateKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    }
+
+    function resetDailyIfNeeded() {
+      const today = getLocalDateKey();
+
+      if (state.lastReset !== today) {
+        state.lastReset = today;
+        state.rollsLeft = DAILY_ROLLS;
+        state.claimsLeft = DAILY_CLAIMS;
+        saveState();
+      }
+    }
+
+    /* =========================
+       FRASES E RELÓGIO
+       ========================= */
 
     function getPeriod(hour) {
       if (hour < 5) return "madrugada";
@@ -610,7 +1049,34 @@
       updatePhrase(false);
     }
 
-    function getRandomPokemonId() {
+    /* =========================
+       POKÉMON / RARIDADE
+       ========================= */
+
+    function formatPokemonName(name) {
+      return name
+        .split("-")
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+    }
+
+    async function getSpeciesCount() {
+      if (!speciesCountPromise) {
+        speciesCountPromise = fetch(
+          "https://pokeapi.co/api/v2/pokemon-species?limit=1"
+        )
+          .then(response => {
+            if (!response.ok) throw new Error("Species count");
+            return response.json();
+          })
+          .then(data => Number(data.count) || 1025)
+          .catch(() => 1025);
+      }
+
+      return speciesCountPromise;
+    }
+
+    async function getRandomPokemonId() {
       const shouldUseFavorite =
         FAVORITE_POKEMON_IDS.length > 0 &&
         Math.random() < FAVORITE_CHANCE;
@@ -621,14 +1087,41 @@
         ];
       }
 
-      return Math.floor(Math.random() * 1025) + 1;
+      const speciesCount = await getSpeciesCount();
+      return Math.floor(Math.random() * speciesCount) + 1;
     }
 
-    function formatPokemonName(name) {
-      return name
-        .split("-")
-        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" ");
+    function determineRarity(pokemon, species) {
+      if (species?.is_mythical) {
+        return "Mythical";
+      }
+
+      if (species?.is_legendary) {
+        return "Legendary";
+      }
+
+      const baseStatTotal = (pokemon.stats || []).reduce(
+        (sum, stat) => sum + Number(stat.base_stat || 0),
+        0
+      );
+
+      if (baseStatTotal >= 580) return "Epic";
+      if (baseStatTotal >= 500) return "Rare";
+      if (baseStatTotal >= 420) return "Uncommon";
+      return "Common";
+    }
+
+    function raritySymbol(rarity) {
+      const symbols = {
+        Common: "·",
+        Uncommon: "◆",
+        Rare: "★",
+        Epic: "✦",
+        Legendary: "♛",
+        Mythical: "✧"
+      };
+
+      return symbols[rarity] || "·";
     }
 
     function preloadImage(url) {
@@ -645,47 +1138,61 @@
     }
 
     async function preparePokemon() {
-      for (let attempt = 0; attempt < 14; attempt++) {
-        const pokemonId = getRandomPokemonId();
+      for (let attempt = 0; attempt < 16; attempt++) {
+        const pokemonId = await getRandomPokemonId();
         const isShiny = Math.random() < SHINY_CHANCE;
 
         try {
-          const response = await fetch(
-            `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
-          );
+          const [pokemonResponse, speciesResponse] = await Promise.all([
+            fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`),
+            fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`)
+          ]);
 
-          if (!response.ok) continue;
+          if (!pokemonResponse.ok || !speciesResponse.ok) {
+            continue;
+          }
 
-          const pokemon = await response.json();
+          const [pokemon, species] = await Promise.all([
+            pokemonResponse.json(),
+            speciesResponse.json()
+          ]);
 
           const showdown = pokemon.sprites?.other?.showdown;
           const blackWhiteAnimated =
             pokemon.sprites?.versions?.["generation-v"]?.["black-white"]
               ?.animated;
 
-          const normalSprite =
+          const normalAnimated =
             showdown?.front_default ||
             blackWhiteAnimated?.front_default;
 
-          const shinySprite =
+          const shinyAnimated =
             showdown?.front_shiny ||
             blackWhiteAnimated?.front_shiny;
 
-          const sprite = isShiny ? shinySprite : normalSprite;
+          const animatedSprite =
+            isShiny ? shinyAnimated : normalAnimated;
 
-          /*
-            Se o shiny sorteado não tiver GIF animado disponível,
-            tentamos outro Pokémon para manter a regra do idle animado.
-          */
-          if (!sprite) continue;
+          if (!animatedSprite) continue;
 
-          await preloadImage(sprite);
+          const staticSprite =
+            (
+              isShiny
+                ? pokemon.sprites?.front_shiny
+                : pokemon.sprites?.front_default
+            ) || animatedSprite;
+
+          await preloadImage(animatedSprite);
 
           return {
+            uid: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
             id: pokemon.id,
             name: formatPokemonName(pokemon.name),
-            sprite,
-            isShiny
+            sprite: animatedSprite,
+            staticSprite,
+            isShiny,
+            rarity: determineRarity(pokemon, species),
+            claimed: false
           };
         } catch {
           // Tenta outro Pokémon.
@@ -705,8 +1212,13 @@
       }
 
       const prepared = await nextPokemonPromise;
+      nextPokemonPromise = null;
       return prepared;
     }
+
+    /* =========================
+       SHINY
+       ========================= */
 
     function getAudioContext() {
       if (!audioContext) {
@@ -778,11 +1290,6 @@
     async function triggerShinySound() {
       const played = await playShinySound();
 
-      /*
-        Firefox/Chrome podem bloquear áudio automático em uma nova aba.
-        Nesse caso o som fica pendente e toca na primeira interação
-        real do usuário.
-      */
       if (!played) {
         pendingShinySound = true;
       }
@@ -793,17 +1300,120 @@
       playShinySound();
     }
 
-    async function showNextPokemon(firstLoad = false) {
-      if (pokemonChanging) return;
+    /* =========================
+       UI DO GACHA
+       ========================= */
+
+    function collectionKey(roll) {
+      return `${roll.id}:${roll.isShiny ? "shiny" : "normal"}`;
+    }
+
+    function isOwned(roll) {
+      const key = collectionKey(roll);
+      return state.collection.some(item => item.key === key);
+    }
+
+    function updateGachaUI() {
+      resetDailyIfNeeded();
+
+      const roll = state.currentRoll;
+
+      gachaStats.textContent =
+        `${state.rollsLeft} rolls · ` +
+        `${state.claimsLeft} claims · ` +
+        `${state.coins} coins`;
+
+      rollButton.disabled =
+        state.rollsLeft <= 0 || pokemonChanging;
+
+      buyRollButton.disabled =
+        state.coins < EXTRA_ROLL_PRICE;
+
+      collectionBuyRoll.disabled =
+        state.coins < EXTRA_ROLL_PRICE;
+
+      if (!roll) {
+        rollName.textContent = "Sem roll";
+        rollRarity.textContent = "Abra uma nova aba amanhã";
+        claimButton.disabled = true;
+        claimButton.textContent = "Claim";
+        return;
+      }
+
+      rollName.textContent = roll.name;
+
+      const shinyPrefix = roll.isShiny ? "✦ SHINY · " : "";
+      rollRarity.textContent =
+        `${shinyPrefix}${raritySymbol(roll.rarity)} ${roll.rarity}`;
+
+      rollRarity.classList.toggle("shiny", roll.isShiny);
+
+      if (roll.claimed) {
+        claimButton.disabled = true;
+        claimButton.textContent = "Claimed";
+      } else if (state.claimsLeft <= 0) {
+        claimButton.disabled = true;
+        claimButton.textContent = "Sem claims";
+      } else {
+        claimButton.disabled = false;
+        claimButton.textContent = "Claim";
+      }
+    }
+
+    function displayRoll(roll, animate = true) {
+      if (!roll) return;
+
+      pokemonSpriteWrap.classList.remove("shiny");
+
+      pokemonSprite.src = roll.sprite;
+      pokemonSprite.alt = roll.name;
+      pokemonSprite.removeAttribute("title");
+
+      if (roll.isShiny) {
+        void pokemonSpriteWrap.offsetWidth;
+        pokemonSpriteWrap.classList.add("shiny");
+        triggerShinySound();
+      }
+
+      if (animate) {
+        pokemonSprite.classList.add("switching");
+        void pokemonSprite.offsetWidth;
+
+        requestAnimationFrame(() => {
+          pokemonSprite.classList.remove("switching");
+        });
+      }
+
+      updateGachaUI();
+    }
+
+    async function performRoll({
+      consume = true,
+      firstLoad = false,
+      forcePrepared = false
+    } = {}) {
+      if (pokemonChanging) return false;
+
+      resetDailyIfNeeded();
+
+      if (consume && state.rollsLeft <= 0) {
+        showToast("Sem rolls por hoje.");
+        updateGachaUI();
+        return false;
+      }
 
       pokemonChanging = true;
 
+      let consumedRoll = false;
+
       try {
-        /*
-          O primeiro Pokémon entra normalmente.
-          Nas próximas trocas, fazemos uma saída curta mesmo com
-          o próximo sprite já pré-carregado, para a troca não parecer seca.
-        */
+        if (consume) {
+          state.rollsLeft -= 1;
+          state.totalRolls += 1;
+          consumedRoll = true;
+          saveState();
+        }
+
         if (!firstLoad && pokemonSprite.getAttribute("src")) {
           pokemonSprite.classList.add("switching");
           await wait(170);
@@ -811,31 +1421,26 @@
           pokemonSprite.classList.add("loading");
         }
 
-        const prepared = await getPreparedPokemon(firstLoad);
-
-        pokemonSpriteWrap.classList.toggle(
-          "shiny",
-          prepared.isShiny
+        const prepared = await getPreparedPokemon(
+          firstLoad && !forcePrepared
         );
 
+        prepared.rollNumber = state.totalRolls;
+
+        state.currentRoll = prepared;
+        saveState();
+
+        pokemonSpriteWrap.classList.remove("shiny");
         pokemonSprite.src = prepared.sprite;
         pokemonSprite.alt = prepared.name;
         pokemonSprite.removeAttribute("title");
 
-        /*
-          Reinicia o efeito shiny caso o novo Pokémon também seja shiny.
-        */
         if (prepared.isShiny) {
-          pokemonSpriteWrap.classList.remove("shiny");
           void pokemonSpriteWrap.offsetWidth;
           pokemonSpriteWrap.classList.add("shiny");
           triggerShinySound();
         }
 
-        /*
-          Força o navegador a registrar o estado escondido antes
-          de animar o novo Pokémon de volta para a posição normal.
-        */
         if (!firstLoad) {
           void pokemonSprite.offsetWidth;
           requestAnimationFrame(() => {
@@ -843,27 +1448,205 @@
           });
         }
 
-        /*
-          Assim que o atual aparece, o próximo já começa a ser
-          buscado e seu GIF fica carregado em memória.
-        */
         queueNextPokemon();
+        updateGachaUI();
+        renderCollection();
+
+        return true;
       } catch {
         pokemonSprite.classList.remove("switching");
+
+        if (consumedRoll) {
+          state.rollsLeft += 1;
+          state.totalRolls = Math.max(0, state.totalRolls - 1);
+          saveState();
+        }
+
+        showToast("Não consegui carregar o roll. Tenta de novo.");
 
         if (!nextPokemonPromise) {
           queueNextPokemon();
         }
+
+        updateGachaUI();
+        return false;
       } finally {
         pokemonSprite.classList.remove("loading");
         pokemonChanging = false;
       }
     }
 
-    function refreshExperience() {
-      updatePhrase(true);
-      showNextPokemon(false);
+    function duplicateReward(roll) {
+      const base = DUPLICATE_REWARDS[roll.rarity] || 20;
+      return roll.isShiny ? base * 3 : base;
     }
+
+    function claimCurrentPokemon() {
+      resetDailyIfNeeded();
+
+      const roll = state.currentRoll;
+
+      if (!roll || roll.claimed) {
+        return;
+      }
+
+      if (state.claimsLeft <= 0) {
+        showToast("Você não tem mais claims hoje.");
+        return;
+      }
+
+      state.claimsLeft -= 1;
+      roll.claimed = true;
+
+      if (isOwned(roll)) {
+        const reward = duplicateReward(roll);
+        state.coins += reward;
+
+        showToast(
+          `Duplicata de ${roll.name}: +${reward} coins.`
+        );
+      } else {
+        state.collection.unshift({
+          key: collectionKey(roll),
+          id: roll.id,
+          name: roll.name,
+          sprite: roll.staticSprite || roll.sprite,
+          isShiny: roll.isShiny,
+          rarity: roll.rarity,
+          obtainedAt: new Date().toISOString(),
+          rollNumber: roll.rollNumber || state.totalRolls
+        });
+
+        showToast(
+          roll.isShiny
+            ? `✦ ${roll.name} shiny entrou na coleção.`
+            : `${roll.name} entrou na coleção.`
+        );
+      }
+
+      state.currentRoll = roll;
+      saveState();
+
+      updateGachaUI();
+      renderCollection();
+    }
+
+    function buyExtraRoll() {
+      resetDailyIfNeeded();
+
+      if (state.coins < EXTRA_ROLL_PRICE) {
+        showToast(`Você precisa de ${EXTRA_ROLL_PRICE} coins.`);
+        return;
+      }
+
+      state.coins -= EXTRA_ROLL_PRICE;
+      state.rollsLeft += 1;
+      saveState();
+
+      updateGachaUI();
+      renderCollection();
+      showToast("+1 roll comprado.");
+    }
+
+    function toggleRollDetails(force) {
+      const open =
+        typeof force === "boolean"
+          ? force
+          : !hero.classList.contains("details-open");
+
+      hero.classList.toggle("details-open", open);
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2400);
+    }
+
+    /* =========================
+       COLLECTION
+       ========================= */
+
+    function openCollection() {
+      renderCollection();
+
+      collectionLayer.classList.add("open");
+      collectionLayer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCollection() {
+      collectionLayer.classList.remove("open");
+      collectionLayer.setAttribute("aria-hidden", "true");
+    }
+
+    function renderCollection() {
+      resetDailyIfNeeded();
+
+      const uniqueSpecies = new Set(
+        state.collection.map(item => item.id)
+      ).size;
+
+      const shinyCount = state.collection.filter(
+        item => item.isShiny
+      ).length;
+
+      collectionStats.textContent =
+        `${uniqueSpecies} Pokémon · ` +
+        `${shinyCount} shiny · ` +
+        `${state.coins} coins · ` +
+        `${state.rollsLeft} rolls · ` +
+        `${state.claimsLeft} claims`;
+
+      collectionBuyRoll.disabled =
+        state.coins < EXTRA_ROLL_PRICE;
+
+      collectionGrid.replaceChildren();
+
+      if (!state.collection.length) {
+        const empty = document.createElement("div");
+        empty.className = "collection-empty";
+        empty.textContent =
+          "Sua coleção ainda está vazia. Faça um roll e use Claim.";
+        collectionGrid.appendChild(empty);
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+
+      state.collection.forEach(item => {
+        const card = document.createElement("article");
+        card.className =
+          `collection-item${item.isShiny ? " shiny" : ""}`;
+
+        const image = document.createElement("img");
+        image.src = item.sprite;
+        image.alt = item.name;
+
+        const name = document.createElement("div");
+        name.className = "collection-item-name";
+        name.textContent =
+          item.isShiny ? `✦ ${item.name}` : item.name;
+
+        const rarity = document.createElement("div");
+        rarity.className = "collection-item-rarity";
+        rarity.textContent =
+          `${raritySymbol(item.rarity)} ${item.rarity}`;
+
+        card.append(image, name, rarity);
+        fragment.appendChild(card);
+      });
+
+      collectionGrid.appendChild(fragment);
+    }
+
+    /* =========================
+       SEARCH
+       ========================= */
 
     function openSearch(initialValue = "") {
       searchLayer.classList.add("open");
@@ -913,6 +1696,10 @@
         `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     }
 
+    /* =========================
+       EVENTOS
+       ========================= */
+
     searchInput.addEventListener("keydown", event => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -931,8 +1718,63 @@
       }
     });
 
+    collectionClose.addEventListener("click", closeCollection);
+    collectionBuyRoll.addEventListener("click", buyExtraRoll);
+
+    collectionLayer.addEventListener("mousedown", event => {
+      if (event.target === collectionLayer) {
+        closeCollection();
+      }
+    });
+
+    claimButton.addEventListener("click", event => {
+      event.stopPropagation();
+      claimCurrentPokemon();
+    });
+
+    rollButton.addEventListener("click", event => {
+      event.stopPropagation();
+      updatePhrase(true);
+      performRoll({ consume: true });
+    });
+
+    buyRollButton.addEventListener("click", event => {
+      event.stopPropagation();
+      buyExtraRoll();
+    });
+
+    pokemonSprite.addEventListener("click", event => {
+      event.stopPropagation();
+      flushPendingShinySound();
+      toggleRollDetails();
+    });
+
+    pokemonPanel.addEventListener("mouseenter", () => {
+      if (pokemonSpriteWrap.classList.contains("shiny")) {
+        triggerShinySound();
+      }
+    });
+
     document.addEventListener("keydown", event => {
       flushPendingShinySound();
+
+      if (event.key === "Escape") {
+        if (collectionLayer.classList.contains("open")) {
+          event.preventDefault();
+          closeCollection();
+          return;
+        }
+
+        if (searchLayer.classList.contains("open")) {
+          return;
+        }
+
+        if (hero.classList.contains("details-open")) {
+          event.preventDefault();
+          toggleRollDetails(false);
+          return;
+        }
+      }
 
       if (
         event.ctrlKey ||
@@ -943,26 +1785,35 @@
         return;
       }
 
-      if (document.activeElement === searchInput) {
+      if (
+        collectionLayer.classList.contains("open") ||
+        document.activeElement === searchInput
+      ) {
         return;
       }
 
-      /*
-        Shift + R:
-        novo Pokémon + nova frase, sem recarregar a página.
-      */
+      // Shift + C = coleção.
+      if (
+        event.shiftKey &&
+        event.key.toLowerCase() === "c"
+      ) {
+        event.preventDefault();
+        openCollection();
+        return;
+      }
+
+      // Shift + R = novo roll, consumindo um roll diário.
       if (
         event.shiftKey &&
         event.key.toLowerCase() === "r"
       ) {
         event.preventDefault();
-        refreshExperience();
+        updatePhrase(true);
+        performRoll({ consume: true });
         return;
       }
 
-      /*
-        Atalhos só funcionam com Shift.
-      */
+      // Atalhos externos continuam exigindo Shift.
       if (event.shiftKey) {
         const shortcut = KEYBOARD_SHORTCUTS[event.key.toLowerCase()];
 
@@ -973,19 +1824,14 @@
         }
       }
 
-      /*
-        Space e / continuam abrindo a busca vazia.
-      */
+      // Space ou / abre a pesquisa vazia.
       if (event.key === "/" || event.key === " ") {
         event.preventDefault();
         openSearch();
         return;
       }
 
-      /*
-        Qualquer caractere digitável já abre a pesquisa
-        levando o primeiro caractere junto.
-      */
+      // Qualquer caractere digitável inicia a busca.
       if (event.key.length === 1) {
         event.preventDefault();
         openSearch(event.key);
@@ -998,17 +1844,9 @@
       { passive: true }
     );
 
-    pokemonPanel.addEventListener("mouseenter", () => {
-      if (pokemonSpriteWrap.classList.contains("shiny")) {
-        triggerShinySound();
-      }
-    });
-
-    pokemonSprite.addEventListener("click", event => {
-      event.stopPropagation();
-      flushPendingShinySound();
-      showNextPokemon(false);
-    });
+    /* =========================
+       ADAPTIVE TAB BAR COLOUR
+       ========================= */
 
     function getWallpaperUrl() {
       const value = getComputedStyle(document.documentElement)
@@ -1133,15 +1971,40 @@
       image.src = wallpaperUrl;
     }
 
+    /* =========================
+       BOOT
+       ========================= */
+
+    async function bootGacha() {
+      resetDailyIfNeeded();
+      updateGachaUI();
+      renderCollection();
+
+      /*
+        Abrir uma nova aba = 1 roll gratuito do estoque diário.
+        Quando os rolls acabam, mostramos o último roll salvo.
+      */
+      if (state.rollsLeft > 0) {
+        await performRoll({
+          consume: true,
+          firstLoad: true
+        });
+      } else if (state.currentRoll) {
+        displayRoll(state.currentRoll, false);
+        queueNextPokemon();
+      } else {
+        showToast("Seus rolls voltam amanhã.");
+      }
+    }
+
     updateClock();
     updatePhrase(true);
-    showNextPokemon(true);
     syncThemeColorToWallpaper();
+    bootGacha();
 
     /*
       Atualiza no início de cada novo minuto.
-      Isso também permite que os easter eggs apareçam
-      exatamente no horário certo.
+      Também ativa os easter eggs exatamente no horário certo.
     */
     const delay = (60 - new Date().getSeconds()) * 1000;
 
